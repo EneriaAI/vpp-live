@@ -3,480 +3,864 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BESS v5 Tasuvusmudel — Reaalne PEJ Graafik</title>
+<title>VPP Mudel</title>
 <style>
-:root{--p:#2B5F2B;--a:#E8A838;--d:#1a1a1a;--bg:#f4f5f7;--c:#fff;--b:#ddd;--g:#1B7A1B;--r:#C0392B;--w:#D4870F;--bl:#1A5276}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--d);font-size:13px;line-height:1.45}
-.hdr{background:linear-gradient(135deg,var(--p),#1a3f1a);color:#fff;padding:18px 24px}
-.hdr h1{font-size:18px}.hdr p{opacity:.7;font-size:11px;margin-top:3px}
-.wrap{max-width:1440px;margin:0 auto;padding:12px}
-.cols{display:grid;grid-template-columns:320px 1fr;gap:12px}
-@media(max-width:960px){.cols{grid-template-columns:1fr}}
-.pnl{background:var(--c);border:1px solid var(--b);border-radius:6px;padding:12px;margin-bottom:10px}
-.pnl h2{font-size:12px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--a);padding-bottom:4px;margin-bottom:8px}
-.pnl h3{font-size:11px;font-weight:600;color:#555;margin:8px 0 4px}
-.f{margin-bottom:6px}.f label{display:block;font-size:10px;color:#777;margin-bottom:1px;font-weight:500}
-.f input,.f select{width:100%;padding:4px 6px;border:1px solid #ccc;border-radius:3px;font-size:12px}
-.f input:focus{outline:none;border-color:var(--p)}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.tg{display:flex;align-items:center;gap:6px;margin:4px 0;font-size:11px}
-.tg input{width:14px;height:14px;accent-color:var(--p)}
-.btn{display:block;width:100%;padding:8px;background:var(--p);color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px}
-.btn:hover{background:#1a3f1a}.btn2{background:var(--a)}.btn2:hover{background:#c78a2a}
-.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px}
-.m{background:var(--c);border:1px solid var(--b);border-radius:6px;padding:10px;text-align:center}
-.m .v{font-size:22px;font-weight:700}.m .l{font-size:10px;color:#888;text-transform:uppercase}.m .s{font-size:10px;color:#aaa}
-.m.ok .v{color:var(--g)}.m.wa .v{color:var(--w)}.m.ba .v{color:var(--r)}
-.tg2{display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;margin-top:2px}
-.tg2g{background:#e8f5e9;color:var(--g)}.tg2y{background:#fff8e1;color:var(--w)}.tg2r{background:#fce4ec;color:var(--r)}
-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:6px}
-th{background:var(--p);color:#fff;padding:4px 6px;text-align:right;font-weight:600;font-size:10px}
-th:first-child{text-align:left}td{padding:3px 6px;border-bottom:1px solid #eee;text-align:right}
-td:first-child{text-align:left;font-weight:500}tr:nth-child(even){background:#f9f9f9}
-.neg{color:var(--r)}
-.tabs{display:flex;gap:3px;margin-bottom:8px;flex-wrap:wrap}
-.tab{padding:4px 10px;border:1px solid var(--b);border-radius:4px 4px 0 0;font-size:11px;cursor:pointer;background:#f5f5f5;font-weight:500}
-.tab.on{background:var(--c);border-bottom-color:var(--c);color:var(--p);font-weight:700}
-.tc{display:none}.tc.on{display:block}
-.inf{font-size:10px;color:#999;font-style:italic;margin-top:3px}
-.bar{display:inline-block;height:10px;border-radius:2px;vertical-align:middle}
-.imp{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:1px solid #a5d6a7;border-radius:6px;padding:10px;margin-top:8px}
-.imp h3{color:var(--g);font-size:12px;margin-bottom:4px}.imp p{font-size:11px;margin:2px 0}
-.imp b{color:var(--g)}
-canvas{width:100%!important;height:200px!important}
-.chart-wrap{position:relative;height:220px;margin:8px 0}
+body{font-family:sans-serif;background:#0b1017;color:#dce4ed;font-size:14px;line-height:1.5}
+.hd{background:#131a24;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #253040;position:sticky;top:0;z-index:50}
+.hd h1{font-size:15px;font-weight:700;color:#00d4aa}
+.hd small{font-size:10px;color:#6a7d90;display:block}
+.abtn{padding:8px 18px;background:#00d4aa;color:#0b1017;border:none;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer}
+.tabs{display:flex;overflow-x:auto;background:#131a24;border-bottom:1px solid #253040}
+.tbtn{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:2px solid transparent;color:#6a7d90;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.tbtn.on{color:#00d4aa;border-bottom-color:#00d4aa}
+.wrap{padding:12px;max-width:1300px;margin:0 auto}
+.pan{display:none}.pan.on{display:block}
+.bx{background:#131a24;border:1px solid #253040;border-radius:8px;margin-bottom:12px;overflow:hidden}
+.bx-h{padding:10px 14px;border-bottom:1px solid #253040;font-weight:700;font-size:13px}
+.bx-b{padding:12px 14px}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.col{flex:1;min-width:280px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:10px;font-weight:700;color:#6a7d90;margin-bottom:3px;text-transform:uppercase}
+.fr{display:flex;align-items:center;gap:6px}
+.fr input,.fr select{flex:1}
+.u{font-size:10px;color:#6a7d90;min-width:36px}
+input[type=number],input[type=text],select{width:100%;padding:7px 8px;background:#1a2332;border:1px solid #253040;border-radius:5px;color:#dce4ed;font-size:12px;font-family:monospace}
+input:focus,select:focus{outline:none;border-color:#00d4aa}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{padding:6px 8px;text-align:left;font-size:9px;font-weight:700;color:#6a7d90;border-bottom:1px solid #253040;text-transform:uppercase}
+td{padding:5px 8px;border-bottom:1px solid #1a2332}
+td input{width:60px;text-align:right;padding:4px;font-size:11px}
+.sx{overflow-x:auto}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.kpi{background:#1a2332;border:1px solid #253040;border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:130px}
+.kl{font-size:9px;font-weight:700;color:#6a7d90;text-transform:uppercase;margin-bottom:2px}
+.kv{font-size:17px;font-weight:800;font-family:monospace}
+.ks{font-size:9px;color:#6a7d90;margin-top:2px}
+.vg{color:#00d4aa}.vb{color:#42a5f5}.vr{color:#ef5350}.vo{color:#ffa726}
+.dt th{text-align:right;white-space:nowrap}.dt th:first-child{text-align:left}
+.dt td{text-align:right;font-family:monospace;font-size:11px;white-space:nowrap}.dt td:first-child{text-align:left;font-family:sans-serif;color:#6a7d90}
+.tot td{font-weight:800;border-top:2px solid #253040;color:#00d4aa}
+.bars{display:flex;align-items:flex-end;gap:1px;height:180px;border-bottom:1px solid #253040;padding:0 2px}
+.bgg{flex:1;display:flex;gap:1px;align-items:flex-end;height:100%}
+.br{min-width:3px;width:100%;border-radius:2px 2px 0 0}
+.xlb{display:flex;gap:1px;padding:0 2px}
+.xlb span{flex:1;text-align:center;font-size:8px;color:#6a7d90;font-family:monospace}
+.lgd{display:flex;gap:10px;margin:6px 0;flex-wrap:wrap}
+.lgd span{display:flex;align-items:center;gap:4px;font-size:10px;color:#6a7d90}
+.lgd i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.svgc svg{width:100%;height:auto;display:block}
+.dnw{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.dnw svg{width:160px;height:160px;flex-shrink:0}
+.dnl{font-size:11px}.dnl div{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.dnl i{width:10px;height:10px;border-radius:2px;display:inline-block;flex-shrink:0}
+.rpt{background:#131a24;border:1px solid #253040;border-radius:8px;padding:16px;margin-bottom:12px}
+.rpt h2{font-size:15px;font-weight:800;color:#00d4aa;margin-bottom:10px}
+.rpt h3{font-size:13px;font-weight:700;margin:12px 0 6px}
+.rpt p{font-size:12px;color:#8899aa;margin-bottom:8px}
+.hi{background:rgba(0,212,170,.1);border-left:3px solid #00d4aa;padding:8px 12px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12px}
+.ri{background:rgba(239,83,80,.1);border-left:3px solid #ef5350;padding:8px 12px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12px}
+.disc{background:#1a2332;border:1px solid #253040;border-radius:8px;padding:14px;margin-top:12px;font-size:10px;color:#6a7d90}
+.disc h4{color:#ffa726;font-size:11px;margin-bottom:4px}
+.ctr{text-align:center;padding:14px}
+.err{background:#ef5350;color:white;padding:10px;border-radius:6px;margin:10px 0;font-size:12px;display:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.2px}
+.badge-on{background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.35);color:#00d4aa}
+.badge-warn{background:rgba(255,167,38,.10);border:1px solid rgba(255,167,38,.35);color:#ffa726}
+.badge-off{background:rgba(239,83,80,.10);border:1px solid rgba(239,83,80,.35);color:#ef5350}
 </style>
 </head>
 <body>
-<div class="hdr">
-<h1>⚡ BESS v5 Tasuvusmudel — Reaalne PEJ Graafik HP260001</h1>
-<p>Kaerapõllu, Elva vald | PEJ 675 kWp / Inverter 500 kW | Mõõteandmed 2025 (15-min) | 604.8 MWh aastane toodang</p>
-</div>
-<div class="wrap"><div class="cols">
-<!-- LEFT -->
-<div>
-<div class="pnl">
-<h2>⚙️ Konfiguratsioon</h2>
-<div class="f"><label>Akupaigaldis</label>
-<select id="cfg" onchange="lCfg()">
-<option value="500">500 kW / 1028 kWh (4 tk)</option>
-<option value="750">750 kW / 1542 kWh (6 tk)</option>
-<option value="1000" selected>1000 kW / 2056 kWh (8 tk) ✓</option>
-</select></div>
-<div class="r2">
-<div class="f"><label>BESS (kW)</label><input id="bP" type="number" value="1000"></div>
-<div class="f"><label>BESS (kWh)</label><input id="bC" type="number" value="2056"></div>
-</div>
-<div class="r2">
-<div class="f"><label>PEJ paneelid (kWp)</label><input id="pP" type="number" value="675"></div>
-<div class="f"><label>Inverter (kW)</label><input id="iP" type="number" value="500"></div>
-</div>
-<div class="r2">
-<div class="f"><label>Võrgu liitumine (kW)</label><input id="gL" type="number" value="490"></div>
-<div class="f"><label>CAPEX BESS+PEJ (€)</label><input id="cx" type="number" value="810380"></div>
-</div>
-<div class="f"><label>PEJ CAPEX (€)</label><input id="pc" type="number" value="337500"></div>
+
+<div class="hd">
+ <div>
+   <h1>⚡ VPP Tasuvusmudel</h1>
+   <small>BESS+PEJ Eneria OÜ</small>
+ </div>
+ <button class="abtn" onclick="doCalc()">▶ Arvuta</button>
 </div>
 
-<div class="pnl">
-<h2>🔋 Aku parameetrid</h2>
-<div class="r2">
-<div class="f"><label>RTE (%)</label><input id="rt" type="number" value="91.3" step="0.1"></div>
-<div class="f"><label>Alg. efekt. (%)</label><input id="ie" type="number" value="98"></div>
-</div>
-<div class="r2">
-<div class="f"><label>Degradatsioon (%/a)</label><input id="dg" type="number" value="3" step="0.5"></div>
-<div class="f"><label>Max tsüklid</label><input id="mc" type="number" value="10000"></div>
-</div>
-<div class="r2">
-<div class="f"><label>Aku eluiga (a)</label><input id="bl" type="number" value="10"></div>
-<div class="f"><label>Taristu eluiga (a)</label><input id="il" type="number" value="15"></div>
-</div>
+<div class="tabs">
+ <button class="tbtn on" onclick="switchTab(0)">📋 Sisendid</button>
+ <button class="tbtn" onclick="switchTab(1)">⚙️ Mootor</button>
+ <button class="tbtn" onclick="switchTab(2)">📊 Tulemused</button>
+ <button class="tbtn" onclick="switchTab(3)">📈 Graafikud</button>
+ <button class="tbtn" onclick="switchTab(4)">⚖️ Võrdlus</button>
+ <button class="tbtn" onclick="switchTab(5)">📄 Analüüs</button>
 </div>
 
-<div class="pnl">
-<h2>📊 Finantssisendid</h2>
-<div class="r2">
-<div class="f"><label>WACC (%)</label><input id="wc" type="number" value="5" step="0.5"></div>
-<div class="f"><label>Inflatsioon (%)</label><input id="if" type="number" value="2" step="0.5"></div>
-</div>
-<div class="r2">
-<div class="f"><label>OPEX (€/MW/a)</label><input id="ox" type="number" value="15000"></div>
-<div class="f"><label>VPP tasu (%)</label><input id="vf" type="number" value="10"></div>
-</div>
-<div class="f"><label>Müügimarginaal (€/MWh)</label><input id="mg" type="number" value="15"></div>
+<div class="wrap">
+<div id="errBox" class="err"></div>
+
+<!-- ===== SISENDID ===== -->
+<div id="p0" class="pan on">
+<div class="row"><div class="col">
+ <div class="bx"><div class="bx-h">🔋 BESS Parameetrid</div><div class="bx-b">
+  <div class="fg"><label>Võimsus</label><div class="fr"><input type="number" id="i1" value="0.5" step="0.1"><span class="u">MW</span></div></div>
+  <div class="fg"><label>Mahtuvus</label><div class="fr"><input type="number" id="i2" value="1.028" step="0.01"><span class="u">MWh</span></div></div>
+  <div class="fg"><label>Efektiivsus</label><div class="fr"><input type="number" id="i3" value="91.3" step="0.1"><span class="u">%</span></div></div>
+  <div class="fg"><label>Eluiga</label><div class="fr"><input type="number" id="i4" value="15" step="1"><span class="u">a</span></div></div>
+  <div class="fg"><label>Max tsüklid</label><div class="fr"><input type="number" id="i5" value="10000"><span class="u">tk</span></div></div>
+  <div class="fg"><label>Degradatsioon</label><div class="fr"><input type="number" id="i6" value="3" step="0.5"><span class="u">%/a</span></div></div>
+  <div class="fg"><label>DOD</label><div class="fr"><input type="number" id="i7" value="90"><span class="u">%</span></div></div>
+  <div class="fg"><label>SOC Window</label><div class="fr"><input type="number" id="i8" value="98"><span class="u">%</span></div></div>
+
+  <div class="fg">
+    <label>Kärbe loogika (eksportlimiit)</label>
+    <div class="fr">
+      <select id="kmode">
+        <option value="bess">BESS prioriteet (soovitatud)</option>
+        <option value="prorata">Pro-rata (vana)</option>
+        <option value="pej">PEJ prioriteet</option>
+      </select>
+      <span class="u">mode</span>
+    </div>
+  </div>
+ </div></div>
+
+ <div class="bx"><div class="bx-h">☀️ PEJ Parameetrid</div><div class="bx-b">
+  <div class="fg"><label>Võimsus</label><div class="fr"><input type="number" id="j1" value="0.675" step="0.025"><span class="u">MW</span></div></div>
+  <div class="fg"><label>Tootlikkus</label><div class="fr"><input type="number" id="j2" value="1100" step="50"><span class="u">kWh/kWp</span></div></div>
+  <div class="fg"><label>Perf. Ratio</label><div class="fr"><input type="number" id="j3" value="85"><span class="u">%</span></div></div>
+  <div class="fg"><label>Degradatsioon</label><div class="fr"><input type="number" id="j4" value="2"><span class="u">%/a</span></div></div>
+  <div class="fg"><label>mFRR energy %</label><div class="fr"><input type="number" id="j5" value="30"><span class="u">%</span></div></div>
+  <div class="fg"><label>aFRR energy %</label><div class="fr"><input type="number" id="j6" value="10"><span class="u">%</span></div></div>
+  <div class="fg"><label>mFRR cap %</label><div class="fr"><input type="number" id="j7" value="20"><span class="u">%</span></div></div>
+  <div class="fg"><label>aFRR cap %</label><div class="fr"><input type="number" id="j8" value="5"><span class="u">%</span></div></div>
+  <div class="fg"><label>Otse müük %</label><div class="fr"><input type="number" id="j9" value="35"><span class="u">%</span></div></div>
+ </div></div>
+</div><div class="col">
+ <div class="bx"><div class="bx-h">📈 Turuandmed (€k/MW/a)</div><div class="bx-b"><div class="sx">
+  <table><thead><tr><th>Turg</th><th>Opt</th><th>Real</th><th>Pess</th></tr></thead><tbody>
+   <tr><td>DAM</td><td><input type="number" id="d_o" value="120"></td><td><input type="number" id="d_r" value="105"></td><td><input type="number" id="d_p" value="53"></td></tr>
+   <tr><td>aFRR_e</td><td><input type="number" id="ae_o" value="60"></td><td><input type="number" id="ae_r" value="40"></td><td><input type="number" id="ae_p" value="20"></td></tr>
+   <tr><td>mFRR_e</td><td><input type="number" id="me_o" value="45"></td><td><input type="number" id="me_r" value="45"></td><td><input type="number" id="me_p" value="35"></td></tr>
+   <tr><td>FCR</td><td><input type="number" id="f_o" value="75"></td><td><input type="number" id="f_r" value="75"></td><td><input type="number" id="f_p" value="8"></td></tr>
+   <tr><td>aFRR_c</td><td><input type="number" id="ac_o" value="52"></td><td><input type="number" id="ac_r" value="52"></td><td><input type="number" id="ac_p" value="25"></td></tr>
+   <tr><td>mFRR_c</td><td><input type="number" id="mc_o" value="15"></td><td><input type="number" id="mc_r" value="15"></td><td><input type="number" id="mc_p" value="25"></td></tr>
+  </tbody></table>
+ </div>
+ <div style="margin-top:10px"><label style="font-size:10px;font-weight:700;color:#6a7d90">PEJ DOWN HINNAD</label></div>
+ <div class="sx">
+  <table><thead><tr><th>Teenus</th><th>Opt</th><th>Real</th><th>Pess</th></tr></thead><tbody>
+   <tr><td>aFRR_e</td><td><input type="number" id="pa_o" value="100"></td><td><input type="number" id="pa_r" value="65"></td><td><input type="number" id="pa_p" value="30"></td></tr>
+   <tr><td>mFRR_e</td><td><input type="number" id="pm_o" value="150"></td><td><input type="number" id="pm_r" value="100"></td><td><input type="number" id="pm_p" value="50"></td></tr>
+   <tr><td>aFRR_c</td><td><input type="number" id="pc_o" value="40"></td><td><input type="number" id="pc_r" value="27"></td><td><input type="number" id="pc_p" value="15"></td></tr>
+   <tr><td>mFRR_c</td><td><input type="number" id="px_o" value="60"></td><td><input type="number" id="px_r" value="47"></td><td><input type="number" id="px_p" value="35"></td></tr>
+   <tr><td>PEJ DAM</td><td><input type="number" id="pd_o" value="120"></td><td><input type="number" id="pd_r" value="85"></td><td><input type="number" id="pd_p" value="60"></td></tr>
+  </tbody></table>
+ </div></div></div>
+
+ <div class="bx"><div class="bx-h">💰 Kulud ja Finants</div><div class="bx-b">
+  <div class="fg"><label>BESS CAPEX</label><div class="fr"><input type="number" id="c1" value="230"><span class="u">€/kWh</span></div></div>
+  <div class="fg"><label>PEJ CAPEX</label><div class="fr"><input type="number" id="c2" value="500"><span class="u">€/kW</span></div></div>
+  <div class="fg"><label>BESS OPEX</label><div class="fr"><input type="number" id="c3" value="15000"><span class="u">€/MW/a</span></div></div>
+  <div class="fg"><label>PEJ OPEX</label><div class="fr"><input type="number" id="c4" value="15000"><span class="u">€/MW/a</span></div></div>
+  <div class="fg"><label>VPP tasu</label><div class="fr"><input type="number" id="c5" value="10"><span class="u">%</span></div></div>
+  <div class="fg"><label>Marginaal</label><div class="fr"><input type="number" id="c6" value="15"><span class="u">€/MWh</span></div></div>
+  <div class="fg"><label>WACC</label><div class="fr"><input type="number" id="c7" value="5"><span class="u">%</span></div></div>
+  <div class="fg"><label>Inflatsioon</label><div class="fr"><input type="number" id="c8" value="2"><span class="u">%/a</span></div></div>
+
+  <div class="fg"><label>Maks võrgust (import)</label><div class="fr"><input type="number" id="g6" value="0.5" step="0.1"><span class="u">MW</span></div></div>
+  <div class="fg"><label>Maks võrku (eksport)</label><div class="fr"><input type="number" id="g7" value="0.5" step="0.1"><span class="u">MW</span></div></div>
+
+  <div class="fg"><label>Võrgup. päev</label><div class="fr"><input type="number" id="g1" value="75.3"><span class="u">€/MWh</span></div></div>
+  <div class="fg"><label>Võrgup. öö</label><div class="fr"><input type="number" id="g2" value="43.5"><span class="u">€/MWh</span></div></div>
+  <div class="fg"><label>Kuutasu</label><div class="fr"><input type="number" id="g3" value="23.24"><span class="u">€/kuu</span></div></div>
+  <div class="fg"><label>Imbalance</label><div class="fr"><input type="number" id="g4" value="2"><span class="u">€/MWh</span></div></div>
+  <div class="fg"><label>Arb. tsüklid/a</label><div class="fr"><input type="number" id="g5" value="250"><span class="u">#</span></div></div>
+ </div></div>
+</div></div>
+<div class="ctr"><button class="abtn" onclick="doCalc()">▶ ARVUTA KÕIK STSENAARIUMID</button></div>
 </div>
 
-<div class="pnl">
-<h2>🆕 v5 Optimeerimisloogika</h2>
-<div class="tg"><input type="checkbox" id="eC" checked><label for="eC"><b>Clipping Capture</b></label></div>
-<p class="inf">Reaalsed platootunnid: 165 h/a. Inverter piiratud ~489 kW, paneelid suudavad ~660 kW. Ülejääk ~27.8 MWh/a akusse @ 0€.</p>
-
-<div class="tg" style="margin-top:6px"><input type="checkbox" id="eD" checked><label for="eD"><b>Degradatsioonipõhine arbitraaž</b></label></div>
-<div class="r2">
-<div class="f"><label>Avg DoD (%)</label><input id="dd" type="number" value="80"></div>
-<div class="f"><label>Arb. min spread (€/MWh)</label><input id="ms" type="number" value="0" readonly></div>
-</div>
-<p class="inf">Cost/tsükkel arvutatakse automaatselt. Madala marginaaliga arbitraaž filtreeritakse välja.</p>
-
-<div class="tg" style="margin-top:6px"><input type="checkbox" id="eF" checked><label for="eF"><b>FCR-D / aFRR eristamine</b></label></div>
-<div class="r3">
-<div class="f"><label>FCR-D (%)</label><input id="fs" type="number" value="40"></div>
-<div class="f"><label>aFRR (%)</label><input id="as" type="number" value="35"></div>
-<div class="f"><label>Arbitraaž (%)</label><input id="bs" type="number" value="25"></div>
-</div>
-<div class="r2">
-<div class="f"><label>FCR-D ts/päev</label><input id="fc" type="number" value="0.1" step="0.1"></div>
-<div class="f"><label>aFRR ts/päev</label><input id="ac" type="number" value="1.5" step="0.1"></div>
-</div>
-</div>
-
-<button class="btn" onclick="run()">▶ ARVUTA v5 MUDEL</button>
-<button class="btn btn2" style="margin-top:4px" onclick="cmp()">📊 v4 vs v5 VÕRDLUS</button>
-</div>
-
-<!-- RIGHT -->
-<div id="out">
-<div class="pnl"><h2>📈 Reaalne PEJ toodang 2025</h2><div id="pvChart"></div></div>
-<div class="pnl"><p style="color:#888;text-align:center;padding:20px">Vajuta <b>ARVUTA v5 MUDEL</b></p></div>
-</div>
+<!-- ===== MOOTOR ===== -->
+<div id="p1" class="pan">
+<div class="row"><div class="col">
+ <div class="bx"><div class="bx-h">Reservi kordajad</div><div class="bx-b"><div class="sx">
+  <table><thead><tr><th>Faktor</th><th style="color:#00d4aa">Opt</th><th style="color:#42a5f5">Real</th><th style="color:#ef5350">Pess</th></tr></thead><tbody>
+   <tr><td>Res Price</td><td><input type="number" id="s1" value="1" step="0.05"></td><td><input type="number" id="s2" value="1" step="0.05"></td><td><input type="number" id="s3" value="0.75" step="0.05"></td></tr>
+   <tr><td>Res Volume</td><td><input type="number" id="s4" value="1.1" step="0.05"></td><td><input type="number" id="s5" value="1" step="0.05"></td><td><input type="number" id="s6" value="0.85" step="0.05"></td></tr>
+   <tr><td>Res Avail</td><td><input type="number" id="s7" value="1.05" step="0.05"></td><td><input type="number" id="s8" value="1" step="0.05"></td><td><input type="number" id="s9" value="0.9" step="0.05"></td></tr>
+   <tr><td>Realis-%</td><td><input type="number" id="s10" value="0.85" step="0.05"></td><td><input type="number" id="s11" value="0.7" step="0.05"></td><td><input type="number" id="s12" value="0.6" step="0.05"></td></tr>
+  </tbody></table>
+ </div></div></div>
+</div><div class="col">
+ <div class="bx"><div class="bx-h">Energia kordajad</div><div class="bx-b"><div class="sx">
+  <table><thead><tr><th>Faktor</th><th style="color:#00d4aa">Opt</th><th style="color:#42a5f5">Real</th><th style="color:#ef5350">Pess</th></tr></thead><tbody>
+   <tr><td>En Price</td><td><input type="number" id="e1" value="1" step="0.05"></td><td><input type="number" id="e2" value="0.7" step="0.05"></td><td><input type="number" id="e3" value="0.7" step="0.05"></td></tr>
+   <tr><td>En Volume</td><td><input type="number" id="e4" value="1" step="0.05"></td><td><input type="number" id="e5" value="0.8" step="0.05"></td><td><input type="number" id="e6" value="0.8" step="0.05"></td></tr>
+   <tr><td>En Avail</td><td><input type="number" id="e7" value="1" step="0.05"></td><td><input type="number" id="e8" value="0.9" step="0.05"></td><td><input type="number" id="e9" value="0.8" step="0.05"></td></tr>
+  </tbody></table>
+ </div></div></div>
 </div></div>
 
+<div class="bx"><div class="bx-h">Aasta dünaamika (15a)</div><div class="bx-b"><div class="sx">
+ <table><thead><tr><th>A</th><th>Tech</th><th>R.Sat</th><th>R.Cyc</th><th>E.Sat</th><th>E.Cyc</th><th>Turu k</th></tr></thead><tbody>
+  <tr><td>1</td><td><input id="y0_0" value="1"></td><td><input id="y0_1" value="1"></td><td><input id="y0_2" value="1.02"></td><td><input id="y0_3" value="1"></td><td><input id="y0_4" value="1.1"></td><td><input id="y0_5" value="1"></td></tr>
+  <tr><td>2</td><td><input id="y1_0" value="1"></td><td><input id="y1_1" value="1"></td><td><input id="y1_2" value="0.98"></td><td><input id="y1_3" value="1"></td><td><input id="y1_4" value="0.92"></td><td><input id="y1_5" value="1"></td></tr>
+  <tr><td>3</td><td><input id="y2_0" value="1"></td><td><input id="y2_1" value="0.9"></td><td><input id="y2_2" value="1"></td><td><input id="y2_3" value="1"></td><td><input id="y2_4" value="1"></td><td><input id="y2_5" value="1"></td></tr>
+  <tr><td>4</td><td><input id="y3_0" value="1"></td><td><input id="y3_1" value="0.9"></td><td><input id="y3_2" value="1.01"></td><td><input id="y3_3" value="0.92"></td><td><input id="y3_4" value="1.15"></td><td><input id="y3_5" value="0.7"></td></tr>
+  <tr><td>5</td><td><input id="y4_0" value="1"></td><td><input id="y4_1" value="0.8"></td><td><input id="y4_2" value="0.99"></td><td><input id="y4_3" value="0.92"></td><td><input id="y4_4" value="0.88"></td><td><input id="y4_5" value="0.65"></td></tr>
+  <tr><td>6</td><td><input id="y5_0" value="1"></td><td><input id="y5_1" value="0.8"></td><td><input id="y5_2" value="1.02"></td><td><input id="y5_3" value="0.92"></td><td><input id="y5_4" value="1.1"></td><td><input id="y5_5" value="0.63"></td></tr>
+  <tr><td>7</td><td><input id="y6_0" value="1"></td><td><input id="y6_1" value="0.8"></td><td><input id="y6_2" value="0.98"></td><td><input id="y6_3" value="0.85"></td><td><input id="y6_4" value="0.92"></td><td><input id="y6_5" value="0.61"></td></tr>
+  <tr><td>8</td><td><input id="y7_0" value="1"></td><td><input id="y7_1" value="0.65"></td><td><input id="y7_2" value="1"></td><td><input id="y7_3" value="0.85"></td><td><input id="y7_4" value="1"></td><td><input id="y7_5" value="0.5"></td></tr>
+  <tr><td>9</td><td><input id="y8_0" value="1"></td><td><input id="y8_1" value="0.65"></td><td><input id="y8_2" value="1.01"></td><td><input id="y8_3" value="0.85"></td><td><input id="y8_4" value="1.15"></td><td><input id="y8_5" value="0.45"></td></tr>
+  <tr><td>10</td><td><input id="y9_0" value="1"></td><td><input id="y9_1" value="0.65"></td><td><input id="y9_2" value="0.99"></td><td><input id="y9_3" value="0.75"></td><td><input id="y9_4" value="0.88"></td><td><input id="y9_5" value="0.42"></td></tr>
+  <tr><td>11</td><td><input id="y10_0" value="1"></td><td><input id="y10_1" value="0.65"></td><td><input id="y10_2" value="1.02"></td><td><input id="y10_3" value="0.75"></td><td><input id="y10_4" value="1.1"></td><td><input id="y10_5" value="0.42"></td></tr>
+  <tr><td>12</td><td><input id="y11_0" value="1"></td><td><input id="y11_1" value="0.65"></td><td><input id="y11_2" value="0.98"></td><td><input id="y11_3" value="0.75"></td><td><input id="y11_4" value="0.92"></td><td><input id="y11_5" value="0.42"></td></tr>
+  <tr><td>13</td><td><input id="y12_0" value="1"></td><td><input id="y12_1" value="0.65"></td><td><input id="y12_2" value="1"></td><td><input id="y12_3" value="0.75"></td><td><input id="y12_4" value="1"></td><td><input id="y12_5" value="0.42"></td></tr>
+  <tr><td>14</td><td><input id="y13_0" value="1"></td><td><input id="y13_1" value="0.65"></td><td><input id="y13_2" value="1.01"></td><td><input id="y13_3" value="0.75"></td><td><input id="y13_4" value="1.15"></td><td><input id="y13_5" value="0.42"></td></tr>
+  <tr><td>15</td><td><input id="y14_0" value="1"></td><td><input id="y14_1" value="0.65"></td><td><input id="y14_2" value="0.99"></td><td><input id="y14_3" value="0.75"></td><td><input id="y14_4" value="0.88"></td><td><input id="y14_5" value="0.33"></td></tr>
+ </tbody></table>
+</div></div></div>
+</div>
+
+<!-- ===== TULEMUSED ===== -->
+<div id="p2" class="pan"><div id="out_res"></div></div>
+
+<!-- ===== GRAAFIKUD ===== -->
+<div id="p3" class="pan"><div id="out_ch"></div></div>
+
+<!-- ===== VÕRDLUS ===== -->
+<div id="p4" class="pan"><div id="out_comp"></div></div>
+
+<!-- ===== ANALÜÜS ===== -->
+<div id="p5" class="pan"><div id="out_rpt"></div></div>
+
+</div>
+
 <script>
-// === REAL PV DATA from Kaerapõllu 675kWp / 500kW inverter ===
-var mKWh=[3166,18873,53032,76029,88068,80792,88748,82202,65780,35925,9085,3102];
-var mPeak=[211.9,468.1,488.6,489.2,488.8,489.2,489.2,488.4,488.8,488.4,308.4,175.6];
-var mPlat=[0,0,16.0,36.0,35.2,19.2,26.5,16.2,13.2,2.2,0,0];
-var mClip=[0,0,2694,6085,5951,3253,4474,2734,2234,378,0,0];
-var hProf=[
-[0,0,0,0,0,0,0,0,0.2,4.2,13,21,23.9,21.7,13.8,4.1,0.1,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,2,20.8,51,82.7,107.1,119.1,116,98,59.3,17,0.9,0,0,0,0,0,0],
-[0,0,0,0,0,0,4.6,40.6,96,161.5,195.8,224.5,232.3,230.9,226.4,165.7,96.8,30.9,4.1,0.5,0,0,0,0],
-[0,0,0,0,0,0.4,7.6,35.1,97.6,181.6,248.3,291.8,312.2,316.3,307.4,280.7,220.8,147.8,67.8,16.9,1.9,0,0,0],
-[0,0,0,0,0.4,7,25.3,66.9,154.8,233.9,292,295.9,300.6,294,291.3,291.3,243,181.2,107.6,39.9,13.7,2,0,0],
-[0,0,0,0,1.9,11.9,29.5,69.9,132.4,200,260.9,282.5,273.2,271.7,285.4,257.6,240.5,181.3,111,54.3,21.8,7,0.4,0],
-[0,0,0,0,0.7,8.6,24.9,59.1,129,192.1,252.7,286,322.9,309.1,319.5,307.2,270.6,188.9,112.8,48.8,23.1,6.5,0.2,0],
-[0,0,0,0,0,1.6,13.6,44.9,110.6,196.8,264.7,305.4,321.4,307.6,314.3,261.2,221.3,157.7,92.7,30.9,6.7,0.3,0,0],
-[0,0,0,0,0,0,0.9,15.7,78.2,159.1,233.6,270.3,288.6,291.4,294.7,244.8,177.7,104,30.1,3.4,0,0,0,0],
-[0,0,0,0,0,0,0,1.2,20.3,69.9,114.4,173.8,194.7,196.3,154.6,136.3,78.2,17.9,1.3,0,0,0,0,0],
-[0,0,0,0,0,0,0,0.1,3.6,19.5,46.2,67.4,71.7,59.4,29.2,5.5,0.1,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0.2,3.5,14,25.5,30,17.9,8.5,0.6,0,0,0,0,0,0,0,0]
-];
-var mNm=['Jaan','Veebr','Märts','Apr','Mai','Juuni','Juuli','Aug','Sept','Okt','Nov','Dets'];
-var totalPEJ=604802; // kWh
+/* === GLOBAL VARS === */
+var RO = null;
+var RR = null;
+var RP = null;
 
-function gv(id){return parseFloat(document.getElementById(id).value)||0}
-function gc(id){return document.getElementById(id).checked}
-function fm(n){return Math.round(n).toLocaleString('et-EE')}
-function fp(n){return n.toFixed(1)+'%'}
-
-function lCfg(){
-var c=document.getElementById('cfg').value;
-var d={'500':{p:500,c:1028,u:4,x:573940},'750':{p:750,c:1542,u:6,x:692160},'1000':{p:1000,c:2056,u:8,x:810380}};
-var o=d[c];document.getElementById('bP').value=o.p;document.getElementById('bC').value=o.c;document.getElementById('cx').value=o.x;
+/* === TAB SWITCH === */
+function switchTab(idx) {
+  var btns = document.querySelectorAll('.tbtn');
+  var i;
+  for (i = 0; i < btns.length; i++) { btns[i].className = 'tbtn'; }
+  btns[idx].className = 'tbtn on';
+  for (i = 0; i < 6; i++) {
+    document.getElementById('p' + i).className = (i === idx) ? 'pan on' : 'pan';
+  }
 }
 
-// Draw PV chart with SVG
-function drawPV(){
-var el=document.getElementById('pvChart');
-var w=el.offsetWidth||700,h=200;
-var mx=Math.max.apply(null,mKWh);
-var bw=(w-60)/12-4;
-var svg='<svg width="'+w+'" height="'+(h+50)+'" style="font-family:Arial,sans-serif;font-size:10px">';
-svg+='<text x="'+(w/2)+'" y="14" text-anchor="middle" font-size="12" font-weight="bold" fill="#2B5F2B">PEJ aastane toodang: '+fm(totalPEJ)+' kWh ('+fp(totalPEJ/1000)+' MWh)</text>';
-// Grid lines
-for(var i=0;i<=4;i++){
-var y=h-i*(h-30)/4+20;
-var lbl=fm(mx/4*i);
-svg+='<line x1="50" y1="'+y+'" x2="'+(w-10)+'" y2="'+y+'" stroke="#eee"/>';
-svg+='<text x="46" y="'+(y+3)+'" text-anchor="end" fill="#999" font-size="9">'+lbl+'</text>';
-}
-// Bars
-for(var m=0;m<12;m++){
-var x=55+m*(bw+4);
-var bh=(mKWh[m]/mx)*(h-30);
-var y=h-bh+20;
-var clr=mPlat[m]>0?'#E8A838':'#4CAF50';
-svg+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" fill="'+clr+'" rx="2"/>';
-// Clipping overlay
-if(mClip[m]>0){
-var ch2=(mClip[m]/mx)*(h-30);
-svg+='<rect x="'+x+'" y="'+(y)+'" width="'+bw+'" height="'+Math.min(ch2,bh)+'" fill="rgba(232,168,56,0.4)" rx="2"/>';
-svg+='<text x="'+(x+bw/2)+'" y="'+(y-2)+'" text-anchor="middle" fill="#D4870F" font-size="8" font-weight="bold">+'+fp(mClip[m]/1000)+'</text>';
-}
-svg+='<text x="'+(x+bw/2)+'" y="'+(h+35)+'" text-anchor="middle" fill="#555">'+mNm[m]+'</text>';
-svg+='<text x="'+(x+bw/2)+'" y="'+(h+46)+'" text-anchor="middle" fill="#999" font-size="8">'+fp(mKWh[m]/1000)+'</text>';
-}
-svg+='<text x="'+(w-10)+'" y="'+(h+46)+'" text-anchor="end" fill="#D4870F" font-size="9">🟧 Clipping potentsiaal (MWh)</text>';
-svg+='</svg>';
-el.innerHTML=svg;
+/* === GET VALUE === */
+function gv(id) {
+  var el = document.getElementById(id);
+  if (!el) { return 0; }
+  var v = parseFloat(el.value);
+  if (isNaN(v)) { return 0; }
+  return v;
 }
 
-// Financial model core
-function calc(v5){
-var bP=gv('bP'),bC=gv('bC'),pP=gv('pP'),iP=gv('iP'),gL=gv('gL'),cx=gv('cx');
-var rte=gv('rt')/100,ie=gv('ie')/100,dg=gv('dg')/100,mc=gv('mc'),bl=gv('bl'),il=gv('il');
-var wc=gv('wc')/100,inf=gv('if')/100,ox=gv('ox'),vf=gv('vf')/100,mrg=gv('mg');
-var N=il,pr=pP/iP; // panel ratio 1.35
-
-var eC=v5&&gc('eC'),eD=v5&&gc('eD'),eF=v5&&gc('eF');
-var dd=gv('dd')/100,fs=gv('fs')/100,as2=gv('as')/100,arbs=gv('bs')/100;
-var fcd=gv('fc'),acd=gv('ac');
-var cpc=cx/mc*dd; // cost per cycle
-var minSpr=eD?(mrg+cpc/(bC/1000)):0;
-document.getElementById('ms').value=minSpr.toFixed(1);
-
-var scens={opt:{lb:'Optimistlik',ut:.83,pm:1.35,am:1.3},real:{lb:'Realistlik',ut:.70,pm:1.0,am:1.0},pes:{lb:'Pessimistlik',ut:.63,pm:.65,am:.7}};
-var R={};
-
-for(var sk in scens){
-var sc=scens[sk];
-var cf=[],cum=-cx,totR=0,totE=0,totClipR=0,totClipMWh=0,totFcr=0,totAfrr=0,totArb=0,totCyc=0;
-
-cf.push({y:0,em:bC/1000,pm:0,br:0,pr2:0,tr:0,op:0,vp:0,gr:0,tc:0,eb:0,fc2:-cx,cc:-cx,
-cr:0,cm:0,fr:0,ar:0,abr:0,cyc:0});
-
-for(var y=1;y<=N;y++){
-// Battery degradation
-var ef=ie*Math.pow(1-dg,y-1);
-var eMWh=bC/1000*ef;
-
-// PEJ: real data, slight annual panel degradation 0.5%/a
-var pejDeg=Math.pow(0.995,y-1);
-var pejKWh=totalPEJ*pejDeg;
-// PEJ revenue from original model (~50,660 base year, varies by scenario)
-var pejR=50660*sc.pm*Math.pow(1+inf,y-1)*0.95; // conservative
-
-// === BESS Revenue ===
-var bessR=0,clipR=0,clipMWh2=0,fcrR=0,afrrR=0,arbR=0,yCyc=0;
-
-if(eF){
-// FCR-D: capacity payment, minimal cycling
-var fcrP=42*sc.pm*Math.pow(1+inf,y-1); // €/MW/day
-fcrR=fcrP*bP/1000*360*fs*sc.ut/0.7;
-var fCyc=fcd*360*fs;
-// aFRR: activation revenue
-var afrrP=85*sc.pm*sc.am*Math.pow(1+inf,y-1);
-afrrR=afrrP*bP/1000*360*as2*sc.ut/0.7*rte;
-var aCyc=acd*360*as2;
-// Arbitrage
-var arbSpr=55*sc.pm*Math.pow(1+inf,y-1);
-arbR=arbSpr*eMWh*360*arbs*sc.ut/0.7*rte;
-var abCyc=1.0*360*arbs;
-
-// Degradation filter
-if(eD&&arbSpr<minSpr){arbR*=0.7;abCyc*=0.7}
-
-yCyc=fCyc+aCyc+abCyc;
-bessR=fcrR+afrrR+arbR;
-}else{
-// v4 style: flat revenue based on original model data
-// 1000kW realistic year1 BESS revenue = 228,410 from PDF
-var basePerKW=228.41*(bP/1000);
-bessR=basePerKW*sc.pm*sc.ut/0.7*(1+(bP-500)/5000*0.15);
-bessR*=ef/ie; // degrade
-yCyc=1.2*360; // ~432 cycles/year estimate
+/* === FORMAT NUMBER === */
+function fm(n) {
+  if (isNaN(n) || !isFinite(n)) { return '0'; }
+  var neg = n < 0;
+  var s = Math.round(Math.abs(n)).toString();
+  var r = '';
+  var c = 0;
+  var i;
+  for (i = s.length - 1; i >= 0; i--) {
+    if (c > 0 && c % 3 === 0) { r = ' ' + r; }
+    r = s.charAt(i) + r;
+    c++;
+  }
+  return neg ? ('-' + r) : r;
 }
 
-// === CLIPPING CAPTURE ===
-if(eC){
-// Real data: mClip[m] = estimated kWh clipped per month
-// Scale by battery degradation and panel degradation
-for(var m2=0;m2<12;m2++){
-var mClipKWh=mClip[m2]*pejDeg*ef/ie;
-// Can only capture what battery can absorb
-// Assume 60% of time battery has room (SOC management)
-var captured=mClipKWh*0.6;
-clipMWh2+=captured/1000;
-}
-// Revenue: captured at 0€ cost, sold at market price
-var avgP=90*sc.pm*Math.pow(1+inf,y-1);
-clipR=clipMWh2*avgP*rte;
+function fd(n, d) {
+  if (isNaN(n) || !isFinite(n)) { return '0'; }
+  return n.toFixed(d);
 }
 
-totClipR+=clipR;totClipMWh+=clipMWh2;
-totFcr+=fcrR;totAfrr+=afrrR;totArb+=arbR;totCyc+=yCyc;
-
-var totalBR=bessR+clipR;
-var totalR2=totalBR+pejR;
-totR+=totalR2;
-
-// Costs
-var opY=ox*(bP/1000)*Math.pow(1+inf,y-1);
-var vpY=totalBR*vf;
-var grY=17152*Math.pow(1+inf*0.3,y-1); // grid costs, slow inflation
-var tcY=opY+vpY+grY;
-
-var eb=totalR2-tcY;
-totE+=eb;
-cum+=eb;
-
-cf.push({y:y,em:eMWh,pm:pejKWh/1000,br:totalBR,pr2:pejR,tr:totalR2,
-op:opY,vp:vpY,gr:grY,tc:tcY,eb:eb,fc2:eb,cc:cum,
-cr:clipR,cm:clipMWh2,fr:fcrR,ar:afrrR,abr:arbR,cyc:yCyc});
+function fp(n) {
+  if (isNaN(n) || !isFinite(n)) { return '0%'; }
+  return (n * 100).toFixed(1) + '%';
 }
 
-// NPV
-var npv=-cx;
-for(var i=1;i<cf.length;i++)npv+=cf[i].fc2/Math.pow(1+wc,i);
+/* === SHOW ERROR === */
+function showErr(msg) {
+  var el = document.getElementById('errBox');
+  el.style.display = 'block';
+  el.innerHTML = 'VIGA: ' + msg;
+}
+function hideErr() { document.getElementById('errBox').style.display = 'none'; }
 
-// IRR
-var irr=0.1;
-for(var it=0;it<100;it++){
-var nv=-cx,dn=0;
-for(var i=1;i<cf.length;i++){var dc=Math.pow(1+irr,i);nv+=cf[i].fc2/dc;dn-=i*cf[i].fc2/Math.pow(1+irr,i+1)}
-if(Math.abs(dn)<.001)break;irr-=nv/dn;
-if(irr<-0.99){irr=-0.99;break}if(irr>5){irr=5;break}
+/* === MAIN CALC === */
+function doCalc() {
+  hideErr();
+  try {
+    var life = gv('i4'); if (life < 1) { life = 15; }
+
+    var bp = gv('i1');                 // BESS MW
+    var bc = gv('i2');                 // BESS MWh
+    var bd = gv('i6') / 100;           // BESS degr
+    var ec0 = bc * (gv('i7') / 100) * (gv('i8') / 100); // usable MWh window
+
+    var pp = gv('j1');                 // PEJ MW (treated as export power contributor)
+    var py = gv('j2');                 // kWh/kWp
+    var pr = gv('j3') / 100;           // perf ratio
+    var dpej = gv('j4') / 100;         // PEJ degr
+
+    var capex = gv('c1') * bc * 1000 + gv('c2') * pp * 1000;
+    var wacc = gv('c7') / 100;
+    var inf = gv('c8') / 100;
+
+    RO = runScen('o', 0, life, bp, bc, bd, ec0, pp, py, pr, dpej, capex, wacc, inf);
+    RR = runScen('r', 1, life, bp, bc, bd, ec0, pp, py, pr, dpej, capex, wacc, inf);
+    RP = runScen('p', 2, life, bp, bc, bd, ec0, pp, py, pr, dpej, capex, wacc, inf);
+
+    showResults();
+    showCharts();
+    showComp();
+    showReport();
+    switchTab(2);
+  } catch (err) {
+    showErr(err.message);
+  }
 }
 
-var pb=-1;
-for(var i=1;i<cf.length;i++){if(cf[i].cc>=0){pb=i;break}}
+/* === Curtailment helpers === */
+function clamp01(x){ return x < 0 ? 0 : (x > 1 ? 1 : x); }
 
-R[sk]={lb:sc.lb,npv:npv,irr:irr*100,pb:pb,roi:(cum+cx)/cx*100,
-coc1:cf.length>1?cf[1].fc2/cx*100:0,em:(cum+cx)/cx,
-cx:cx,tR:totR,tE:totE,f1:cf.length>1?cf[1].fc2:0,aC:totE/N,cum:cum,
-eM:totR>0?totE/totR*100:0,rMW:totR/(bP/1000)/N,cMWh:cx/(bC/1000),
-cf:cf,tCR:totClipR,tCM:totClipMWh,tFcr:totFcr,tAfrr:totAfrr,tArb:totArb,tCyc:totCyc,
-cpc:cpc,mSpr:minSpr,pejKWh:totalPEJ};
+function runScen(sfx, scenIdx, life, bp, bc, bd, ec0, pp, py, pr, dpej, capex, wacc, inf) {
+  var rm = gv('s' + (1 + scenIdx)) * gv('s' + (4 + scenIdx)) * gv('s' + (7 + scenIdx)) * gv('s' + (10 + scenIdx));
+  var em = gv('e' + (1 + scenIdx)) * gv('e' + (4 + scenIdx)) * gv('e' + (7 + scenIdx));
+
+  /* Grid power constraints */
+  var impLim = gv('g6'); /* MW */
+  var expLim = gv('g7'); /* MW */
+  if (impLim <= 0) { impLim = bp; }
+  if (expLim <= 0) { expLim = bp + pp; }
+
+  /* Effective BESS power limited by grid */
+  var bpExp = Math.min(bp, expLim); /* BESS export limited by grid export */
+  var bpImp = Math.min(bp, impLim); /* BESS charge limited by grid import */
+
+  /* Old pro-rata factor (kept for optional mode) */
+  var concFactor = 1;
+  if ((bpExp + pp) > expLim && (bpExp + pp) > 0) { concFactor = expLim / (bpExp + pp); }
+
+  /* NEW: export allocation factor based on mode */
+  var kmode = (document.getElementById('kmode') ? document.getElementById('kmode').value : 'bess');
+
+  // Default: no curtailment
+  var bessEnergyFactor = 1;
+  var pejEnergyFactor  = 1;
+
+  if (kmode === 'prorata') {
+    // Old behavior: both scaled
+    bessEnergyFactor = concFactor;
+    pejEnergyFactor  = concFactor;
+  } else if (kmode === 'bess') {
+    // BESS-first: BESS gets up to bpExp; PEJ gets leftover
+    bessEnergyFactor = 1; // bpExp already respects export limit
+    if ((bpExp + pp) > expLim && pp > 0) {
+      pejEnergyFactor = clamp01((expLim - bpExp) / pp); // leftover for PV
+    } else {
+      pejEnergyFactor = 1;
+    }
+  } else if (kmode === 'pej') {
+    // PV-first: PV gets up to expLim; BESS gets leftover
+    pejEnergyFactor = (pp > 0) ? clamp01(expLim / pp) : 1;
+    // BESS export room after PV
+    var pvExport = pp * pejEnergyFactor;
+    if (bpExp > 0) {
+      bessEnergyFactor = clamp01((expLim - pvExport) / bpExp);
+    } else {
+      bessEnergyFactor = 1;
+    }
+  }
+
+  /* Import constraint affects effective arbitrage energy for grid charges */
+  var impRatio = (bp > 0) ? (bpImp / bp) : 1;
+  var ec0imp = ec0 * impRatio;
+
+  var yrs = [];
+  var cum = -capex;
+  var pb = null;
+
+  var y, tf, rs, rc, es, ey, db, dp, pMWh;
+  var dam, ae, me, fcr, ac, mc, bt;
+  var pae, pme, pac, pmc, pdr, pt, rev;
+  var opx, vpp, grd, tc, ebitda;
+
+  for (y = 0; y < life; y++) {
+    tf = gv('y' + y + '_0'); if (tf === 0) { tf = 1; }
+    rs = gv('y' + y + '_1'); if (rs === 0) { rs = 1; }
+    rc = gv('y' + y + '_2'); if (rc === 0) { rc = 1; }
+    es = gv('y' + y + '_3'); if (es === 0) { es = 1; }
+    ey = gv('y' + y + '_4'); if (ey === 0) { ey = 1; }
+
+    db = Math.pow(1 - bd, y + 1);
+    dp = Math.pow(1 - dpej, y + 1);
+
+    /* PEJ annual energy (MWh) */
+    pMWh = pp * 1000 * py * pr / 1000 * dp;
+
+    /* BESS energy revenues: apply bessEnergyFactor (NOT concFactor by default) */
+    dam = gv('d_'  + sfx) * 1000 * bpExp * bessEnergyFactor * em * es * ey * tf * db;
+    ae  = gv('ae_' + sfx) * 1000 * bpExp * bessEnergyFactor * rm * rs * rc * tf * db;
+    me  = gv('me_' + sfx) * 1000 * bpExp * bessEnergyFactor * rm * rs * rc * tf * db;
+
+    /* BESS capacity revenues: contracted on bpExp (grid-limited), no energy curtailment factor */
+    fcr = gv('f_'  + sfx) * 1000 * bpExp * rm * tf;
+    ac  = gv('ac_' + sfx) * 1000 * bpExp * rm * tf;
+    mc  = gv('mc_' + sfx) * 1000 * bpExp * rm * tf;
+
+    bt = dam + ae + me + fcr + ac + mc;
+
+    /* PEJ revenues: apply pejEnergyFactor */
+    pae = pMWh * (gv('j6') / 100) * gv('pa_' + sfx) * pejEnergyFactor;
+    pme = pMWh * (gv('j5') / 100) * gv('pm_' + sfx) * pejEnergyFactor;
+
+    /* NOTE: PEJ capacity formulas are placeholders (need market-specific MW-basis). Kept as-is, scaled by pejEnergyFactor. */
+    pac = pMWh * (gv('j8') / 100) * gv('pc_' + sfx) / 1000 * pejEnergyFactor;
+    pmc = pMWh * (gv('j7') / 100) * gv('px_' + sfx) / 1000 * pp * 1000 * pejEnergyFactor;
+
+    pdr = pMWh * (gv('j9') / 100) * gv('pd_' + sfx) * pejEnergyFactor;
+    pt  = pae + pme + pac + pmc + pdr;
+
+    rev = bt + pt;
+
+    opx = (gv('c3') * bp + gv('c4') * pp) * Math.pow(1 + inf, y);
+    vpp = rev * (gv('c5') / 100);
+
+    /* Grid costs: charging limited by import power */
+    grd = gv('g3') * 12
+        + (gv('g1') + gv('g2')) / 2 * ec0imp * gv('g5') / 1000 * 12
+        + gv('g4') * ec0imp * gv('g5');
+
+    tc = opx + vpp + grd;
+    ebitda = rev - tc;
+
+    cum = cum + ebitda;
+    if (pb === null && cum >= 0) { pb = y + 1; }
+
+    yrs.push({
+      y: y + 1, dam: dam, ae: ae, me: me, fcr: fcr, ac: ac, mc: mc,
+      bt: bt, pt: pt, rev: rev, tc: tc, ebitda: ebitda, cum: cum,
+      ec: ec0 * db,
+      dbg: { impLim: impLim, expLim: expLim, bpExp: bpExp, bpImp: bpImp, concFactor: concFactor, bessEnergyFactor: bessEnergyFactor, pejEnergyFactor: pejEnergyFactor, mode: kmode }
+    });
+  }
+
+  var npv = -capex;
+  for (y = 0; y < yrs.length; y++) { npv = npv + yrs[y].ebitda / Math.pow(1 + wacc, y + 1); }
+
+  /* IRR via Newton-Raphson */
+  var irr = 0.1, nv, dv, ni;
+  for (var it = 0; it < 100; it++) {
+    nv = -capex; dv = 0;
+    for (y = 0; y < yrs.length; y++) {
+      nv = nv + yrs[y].ebitda / Math.pow(1 + irr, y + 1);
+      dv = dv - (y + 1) * yrs[y].ebitda / Math.pow(1 + irr, y + 2);
+    }
+    if (Math.abs(dv) < 0.0000000001) { break; }
+    ni = irr - nv / dv;
+    if (Math.abs(ni - irr) < 0.00000001) { irr = ni; break; }
+    irr = ni;
+  }
+  if (isNaN(irr) || !isFinite(irr)) { irr = 0; }
+
+  var t15 = 0, e15 = 0, b15 = 0;
+  for (y = 0; y < yrs.length; y++) { t15 += yrs[y].rev; e15 += yrs[y].ebitda; b15 += yrs[y].bt; }
+
+  return {
+    yrs: yrs, cx: capex, npv: npv, irr: irr, pb: pb,
+    t15: t15, e15: e15, avg: e15 / life,
+    roi: capex > 0 ? e15 / capex * 100 : 0,
+    coc: (yrs.length > 0 && capex > 0) ? yrs[0].ebitda / capex * 100 : 0,
+    em: t15 > 0 ? e15 / t15 * 100 : 0,
+    eq: capex > 0 ? e15 / capex : 0,
+    bk1: (yrs.length > 0 && bc > 0) ? yrs[0].bt / (bc * 1000) : 0,
+    bka: (bc > 0 && life > 0) ? b15 / life / (bc * 1000) : 0
+  };
 }
-return R;
+
+/* === RESULTS === */
+function showResults() {
+  var r = RR;
+  var h = '';
+
+  h += '<div class="kpis">';
+  h += '<div class="kpi"><div class="kl">NPV (Real)</div><div class="kv vb">' + fm(r.npv) + '€</div><div class="ks">O:' + fm(RO.npv) + '€ P:' + fm(RP.npv) + '€</div></div>';
+  h += '<div class="kpi"><div class="kl">IRR</div><div class="kv ' + (r.irr > 0.12 ? 'vg' : 'vo') + '">' + fp(r.irr) + '</div></div>';
+  h += '<div class="kpi"><div class="kl">Payback</div><div class="kv ' + (r.pb && r.pb <= 5 ? 'vg' : 'vo') + '">' + (r.pb ? r.pb : 'N/A') + 'a</div></div>';
+  h += '<div class="kpi"><div class="kl">CAPEX</div><div class="kv vb">' + fm(r.cx) + '€</div></div>';
+  h += '<div class="kpi"><div class="kl">ROI 15a</div><div class="kv ' + (r.roi > 100 ? 'vg' : 'vo') + '">' + fd(r.roi, 1) + '%</div></div>';
+  h += '<div class="kpi"><div class="kl">Kogutulu</div><div class="kv vg">' + fm(r.t15) + '€</div></div>';
+  h += '<div class="kpi"><div class="kl">CF/a kesk</div><div class="kv vg">' + fm(r.avg) + '€</div></div>';
+  h += '<div class="kpi"><div class="kl">EBITDA%</div><div class="kv ' + (r.em > 60 ? 'vg' : 'vo') + '">' + fd(r.em, 1) + '%</div></div>';
+  h += '</div>';
+
+  /* Debug / grid note */
+  var d0 = (r.yrs && r.yrs.length ? r.yrs[0].dbg : null);
+  if (d0) {
+    var badge = (d0.mode === 'bess') ? 'badge-on' : (d0.mode === 'prorata' ? 'badge-warn' : 'badge-off');
+    h += '<div style="background:rgba(66,165,245,.06);border:1px solid rgba(66,165,245,.25);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#b7c7d8">';
+    h += '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">';
+    h += '<div><b>🧪 Debug:</b> Import ' + fd(d0.impLim,2) + 'MW | Eksport ' + fd(d0.expLim,2) + 'MW | BESS exp ' + fd(d0.bpExp,2) + 'MW</div>';
+    h += '<div><span class="badge ' + badge + '">Mode: ' + d0.mode + '</span></div>';
+    h += '</div>';
+    h += '<div style="margin-top:6px;font-family:monospace;font-size:11px;color:#8fb3d6">';
+    h += 'bessFactor=' + fd(d0.bessEnergyFactor,3) + ' | pejFactor=' + fd(d0.pejEnergyFactor,3) + ' | pro-rata=' + fd(d0.concFactor,3);
+    h += '</div></div>';
+  }
+
+  h += buildTbl('Realistlik', RR);
+  h += '<div class="row"><div class="col">' + buildTbl('Optimistlik', RO) + '</div><div class="col">' + buildTbl('Pessimistlik', RP) + '</div></div>';
+
+  document.getElementById('out_res').innerHTML = h;
 }
 
-function st(v,b,h){var ok=h?v>=b:v<=b;var nr=h?v>=b*.8:v<=b*1.2;return ok?'<span class="tg2 tg2g">🟢</span>':nr?'<span class="tg2 tg2y">🟡</span>':'<span class="tg2 tg2r">🔴</span>'}
-function mc2(v,b,h){return(h?v>=b:v<=b)?'ok':(h?v>=b*.8:v<=b*1.2)?'wa':'ba'}
-
-function run(){
-var R=calc(true);var r=R.real,o=R.opt,p=R.pes;
-var h='';
-
-// Metrics
-h+='<div class="pnl"><h2>🎯 v5 Realistlik stsenaarium — '+document.getElementById('cfg').value+' kW</h2><div class="mg">';
-h+='<div class="m '+mc2(r.npv,0,1)+'"><div class="v">€'+fm(r.npv)+'</div><div class="l">NPV</div><div class="s">O:€'+fm(o.npv)+' P:€'+fm(p.npv)+'</div>'+st(r.npv,0,1)+'</div>';
-h+='<div class="m '+mc2(r.irr,12,1)+'"><div class="v">'+fp(r.irr)+'</div><div class="l">IRR</div><div class="s">O:'+fp(o.irr)+' P:'+fp(p.irr)+'</div>'+st(r.irr,12,1)+'</div>';
-h+='<div class="m '+mc2(r.pb>0?r.pb:99,5,0)+'"><div class="v">'+(r.pb>0?r.pb+'a':'N/A')+'</div><div class="l">Payback</div><div class="s">O:'+(o.pb>0?o.pb+'a':'N/A')+' P:'+(p.pb>0?p.pb+'a':'N/A')+'</div>'+st(r.pb>0?r.pb:99,5,0)+'</div>';
-h+='<div class="m '+mc2(r.eM,60,1)+'"><div class="v">'+fp(r.eM)+'</div><div class="l">EBITDA margin</div><div class="s">O:'+fp(o.eM)+' P:'+fp(p.eM)+'</div>'+st(r.eM,60,1)+'</div>';
-h+='<div class="m '+mc2(r.roi,100,1)+'"><div class="v">'+fp(r.roi)+'</div><div class="l">ROI 15a</div><div class="s">O:'+fp(o.roi)+' P:'+fp(p.roi)+'</div>'+st(r.roi,100,1)+'</div>';
-h+='<div class="m '+mc2(r.cum,500000,1)+'"><div class="v">€'+fm(r.cum)+'</div><div class="l">Kum CF a15</div><div class="s">O:€'+fm(o.cum)+' P:€'+fm(p.cum)+'</div>'+st(r.cum,500000,1)+'</div>';
-h+='</div></div>';
-
-// v5 impact
-if(gc('eC')||gc('eD')||gc('eF')){
-h+='<div class="pnl"><h2>🆕 v5 Täienduste mõju</h2><div class="mg">';
-if(gc('eC'))h+='<div class="m ok"><div class="v">€'+fm(r.tCR)+'</div><div class="l">Clipping Capture 15a</div><div class="s">'+fp(r.tCM)+' MWh @ 0€ soetuskulu</div></div>';
-if(gc('eD'))h+='<div class="m"><div class="v">€'+fp(r.cpc)+'</div><div class="l">Kulu/tsükkel</div><div class="s">Min spread: €'+fp(r.mSpr)+'/MWh</div></div>';
-if(gc('eF')){
-var tot=r.tFcr+r.tAfrr+r.tArb;
-h+='<div class="m"><div class="v">'+fm(r.tCyc)+'</div><div class="l">Tsükleid 15a</div><div class="s">Max:'+fm(gv('mc'))+' ('+fp(r.tCyc/gv('mc')*100)+')</div></div>';
-h+='<div class="m"><div class="v" style="font-size:14px">FCR '+(tot>0?(r.tFcr/tot*100).toFixed(0):0)+'% · aFRR '+(tot>0?(r.tAfrr/tot*100).toFixed(0):0)+'% · Arb '+(tot>0?(r.tArb/tot*100).toFixed(0):0)+'%</div><div class="l">Tulu jaotus</div><div class="s">€'+fm(r.tFcr)+' + €'+fm(r.tAfrr)+' + €'+fm(r.tArb)+'</div></div>';
-}
-h+='</div></div>';
+function buildTbl(name, d) {
+  var h = '<div class="bx"><div class="bx-h">' + name + '</div><div class="bx-b"><div class="sx"><table class="dt"><thead><tr><th>A</th><th>BESS€</th><th>PEJ€</th><th>Tulu€</th><th>Kulud€</th><th>EBITDA€</th><th>Kum.CF€</th></tr></thead><tbody>';
+  var i, yr;
+  for (i = 0; i < d.yrs.length; i++) {
+    yr = d.yrs[i];
+    h += '<tr><td>' + yr.y + '</td><td>' + fm(yr.bt) + '</td><td>' + fm(yr.pt) + '</td>';
+    h += '<td style="color:#00d4aa;font-weight:700">' + fm(yr.rev) + '</td>';
+    h += '<td style="color:#ef5350">' + fm(yr.tc) + '</td>';
+    h += '<td style="font-weight:700">' + fm(yr.ebitda) + '</td>';
+    h += '<td style="color:' + (yr.cum >= 0 ? '#00d4aa' : '#ef5350') + ';font-weight:700">' + fm(yr.cum) + '</td></tr>';
+  }
+  h += '<tr class="tot"><td>SUM</td><td></td><td></td><td>' + fm(d.t15) + '</td><td></td><td>' + fm(d.e15) + '</td><td></td></tr>';
+  h += '</tbody></table></div></div></div>';
+  return h;
 }
 
-// Tabs
-h+='<div class="pnl"><div class="tabs">';
-h+='<div class="tab on" onclick="sT(\'t1\',this)">Realistlik CF</div>';
-h+='<div class="tab" onclick="sT(\'t2\',this)">3 stsenaariumi</div>';
-h+='<div class="tab" onclick="sT(\'t3\',this)">PEJ toodang</div>';
-if(gc('eF'))h+='<div class="tab" onclick="sT(\'t4\',this)">Turujaotus</div>';
-h+='</div>';
+/* === CHARTS === */
+function showCharts() {
+  var lbl = [];
+  var i;
+  for (i = 0; i < RR.yrs.length; i++) { lbl.push(RR.yrs[i].y); }
 
-// CF table
-h+='<div id="t1" class="tc on"><table><tr><th>A</th><th>Eff MWh</th><th>PEJ MWh</th><th>BESS tulu</th><th>PEJ tulu</th><th>Kogutulu</th><th>OPEX</th><th>VPP</th><th>Võrk</th><th>EBITDA</th><th>Vaba CF</th><th>Kum CF</th></tr>';
-for(var i=0;i<r.cf.length;i++){
-var c=r.cf[i];var nc=c.cc<0?' class="neg"':'';
-h+='<tr><td>'+c.y+'</td><td>'+c.em.toFixed(2)+'</td><td>'+c.pm.toFixed(0)+'</td><td>'+fm(c.br)+'</td><td>'+fm(c.pr2)+'</td><td>'+fm(c.tr)+'</td><td>'+fm(c.op)+'</td><td>'+fm(c.vp)+'</td><td>'+fm(c.gr)+'</td><td>'+fm(c.eb)+'</td><td>'+fm(c.fc2)+'</td><td'+nc+'>'+fm(c.cc)+'</td></tr>';
-}
-h+='</table></div>';
+  var oR = [], rR = [], pR = [];
+  var oE = [], rE = [], pE = [];
+  var oC = [], rC = [], pC = [];
+  var rB = [], rP = [];
+  for (i = 0; i < RR.yrs.length; i++) {
+    oR.push(RO.yrs[i].rev); rR.push(RR.yrs[i].rev); pR.push(RP.yrs[i].rev);
+    oE.push(RO.yrs[i].ebitda); rE.push(RR.yrs[i].ebitda); pE.push(RP.yrs[i].ebitda);
+    oC.push(RO.yrs[i].cum); rC.push(RR.yrs[i].cum); pC.push(RP.yrs[i].cum);
+    rB.push(RR.yrs[i].bt); rP.push(RR.yrs[i].pt);
+  }
 
-// Scenarios table
-h+='<div id="t2" class="tc"><table><tr><th>Näitaja</th><th>Optimistlik</th><th>Realistlik</th><th>Pessimistlik</th><th>BM</th></tr>';
-var rw=[
-['NPV (€)','€'+fm(o.npv),'€'+fm(r.npv),'€'+fm(p.npv),'>0'],
-['IRR (%)',fp(o.irr),fp(r.irr),fp(p.irr),'>12%'],
-['Payback',o.pb>0?o.pb+'a':'N/A',r.pb>0?r.pb+'a':'N/A',p.pb>0?p.pb+'a':'N/A','<5a'],
-['ROI 15a',fp(o.roi),fp(r.roi),fp(p.roi),'>100%'],
-['Cash-on-Cash a1',fp(o.coc1),fp(r.coc1),fp(p.coc1),'>15%'],
-['Equity Multiple',o.em.toFixed(1)+'x',r.em.toFixed(1)+'x',p.em.toFixed(1)+'x','>2.0x'],
-['CAPEX','€'+fm(-cx),'€'+fm(-cx),'€'+fm(-cx),'-'],
-['15a Kogutulu','€'+fm(o.tR),'€'+fm(r.tR),'€'+fm(p.tR),'-'],
-['15a EBITDA','€'+fm(o.tE),'€'+fm(r.tE),'€'+fm(p.tE),'-'],
-['a1 Vaba CF','€'+fm(o.f1),'€'+fm(r.f1),'€'+fm(p.f1),'>100k'],
-['Kum CF a15','€'+fm(o.cum),'€'+fm(r.cum),'€'+fm(p.cum),'>500k'],
-['EBITDA margin',fp(o.eM),fp(r.eM),fp(p.eM),'>60%']
-];
-var cx=gv('cx');
-for(var i=0;i<rw.length;i++)h+='<tr><td>'+rw[i].join('</td><td>')+'</td></tr>';
-h+='</table></div>';
+  var h = '';
+  h += '<div class="row"><div class="col"><div class="bx"><div class="bx-h">Kogutulu</div><div class="bx-b">';
+  h += mkLine([{n:'Opt',d:oR,c:'#00d4aa'},{n:'Real',d:rR,c:'#42a5f5'},{n:'Pess',d:pR,c:'#ef5350'}], lbl, false);
+  h += '</div></div></div><div class="col"><div class="bx"><div class="bx-h">EBITDA</div><div class="bx-b">';
+  h += mkBars([{n:'Opt',d:oE,c:'#00d4aa'},{n:'Real',d:rE,c:'#42a5f5'},{n:'Pess',d:pE,c:'#ef5350'}], lbl);
+  h += '</div></div></div></div>';
 
-// PEJ tab
-h+='<div id="t3" class="tc"><table><tr><th>Kuu</th><th>Toodang kWh</th><th>MWh</th><th>Tipp kW</th><th>Platoo h</th><th>Clipping kWh</th><th>Profiil</th></tr>';
-for(var m=0;m<12;m++){
-var pct=mKWh[m]/Math.max.apply(null,mKWh)*100;
-h+='<tr><td>'+mNm[m]+'</td><td>'+fm(mKWh[m])+'</td><td>'+fp(mKWh[m]/1000)+'</td><td>'+fp(mPeak[m])+'</td><td>'+fp(mPlat[m])+'</td><td>'+fm(mClip[m])+'</td><td><div class="bar" style="width:'+pct+'px;background:'+(mPlat[m]>0?'#E8A838':'#4CAF50')+'"></div></td></tr>';
-}
-h+='<tr style="font-weight:700;background:#f0f0f0"><td>KOKKU</td><td>'+fm(totalPEJ)+'</td><td>'+fp(totalPEJ/1000)+'</td><td>'+fp(Math.max.apply(null,mPeak))+'</td><td>'+fp(mPlat.reduce(function(a,b){return a+b},0))+'</td><td>'+fm(mClip.reduce(function(a,b){return a+b},0))+'</td><td></td></tr>';
-h+='</table>';
-h+='<p class="inf" style="margin-top:8px">Andmed: Kaerapõllu mõõtepunkt 38ZEE-00778874-U | 2025 | 675 kWp paneelid, 500 kW inverter | Clipping = hinnanguline energia üle inverteri piiri (×1.35 paneel/inverter suhe)</p></div>';
+  h += '<div class="row"><div class="col"><div class="bx"><div class="bx-h">Kumulatiivne CF &amp; Tasuvuspunkt</div><div class="bx-b">';
+  h += mkCumCF([{n:'Opt',d:oC,c:'#00d4aa',pb:RO.pb},{n:'Real',d:rC,c:'#42a5f5',pb:RR.pb},{n:'Pess',d:pC,c:'#ef5350',pb:RP.pb}], lbl);
+  h += '</div></div></div><div class="col"><div class="bx"><div class="bx-h">BESS vs PEJ</div><div class="bx-b">';
+  h += mkBars([{n:'BESS',d:rB,c:'#42a5f5'},{n:'PEJ',d:rP,c:'#00d4aa'}], lbl);
+  h += '</div></div></div></div>';
 
-// Market split
-if(gc('eF')){
-h+='<div id="t4" class="tc"><table><tr><th>A</th><th>FCR-D</th><th>aFRR</th><th>Arbitraaž</th><th>Clipping</th><th>Tsükleid</th></tr>';
-for(var i=1;i<r.cf.length;i++){
-var c=r.cf[i];
-h+='<tr><td>'+c.y+'</td><td>€'+fm(c.fr)+'</td><td>€'+fm(c.ar)+'</td><td>€'+fm(c.abr)+'</td><td>€'+fm(c.cr)+'</td><td>'+c.cyc.toFixed(0)+'</td></tr>';
-}
-h+='</table></div>';
-}
-h+='</div>';
+  var y1 = RR.yrs[0];
+  if (y1) {
+    h += '<div class="bx"><div class="bx-h">Tulude jaotus A1</div><div class="bx-b">';
+    h += mkDonut(y1);
+    h += '</div></div>';
+  }
 
-document.getElementById('out').innerHTML='<div class="pnl"><h2>📈 Reaalne PEJ toodang 2025</h2><div id="pvChart"></div></div>'+h;
-drawPV();
+  document.getElementById('out_ch').innerHTML = h;
 }
 
-function cmp(){
-var v4=calc(false),v5=calc(true);
-var r4=v4.real,r5=v5.real;
-var h='<div class="pnl"><h2>📊 v4 vs v5 Mudeli võrdlus — Realistlik</h2>';
-h+='<table><tr><th>Näitaja</th><th>v4 (baas)</th><th>v5 (täiendatud)</th><th>Δ</th><th>%</th></tr>';
-var cx=gv('cx');
-var ps=[
-['NPV (€)',r4.npv,r5.npv,1],['IRR (%)',r4.irr,r5.irr,1],['Payback (a)',r4.pb,r5.pb,0],
-['15a Kogutulu (€)',r4.tR,r5.tR,1],['15a EBITDA (€)',r4.tE,r5.tE,1],
-['Kum CF a15 (€)',r4.cum,r5.cum,1],['EBITDA margin (%)',r4.eM,r5.eM,1],['a1 Vaba CF (€)',r4.f1,r5.f1,1]
-];
-for(var i=0;i<ps.length;i++){
-var p=ps[i],d=p[2]-p[1],pct=p[1]!=0?(d/Math.abs(p[1])*100):0;
-var gd=p[3]?d>0:d<0;var cl=gd?'color:#1B7A1B':d==0?'':'color:#C0392B';
-var ar=d>0?'↑':d<0?'↓':'—';
-var v4s=p[0].indexOf('%')>-1?fp(p[1]):(p[0]=='Payback (a)'?(p[1]>0?p[1]+'a':'N/A'):'€'+fm(p[1]));
-var v5s=p[0].indexOf('%')>-1?fp(p[2]):(p[0]=='Payback (a)'?(p[2]>0?p[2]+'a':'N/A'):'€'+fm(p[2]));
-var ds=p[0].indexOf('%')>-1?(d>=0?'+':'')+d.toFixed(1)+'pp':(d>=0?'+€':'-€')+fm(Math.abs(d));
-h+='<tr><td>'+p[0]+'</td><td>'+v4s+'</td><td><b>'+v5s+'</b></td><td style="'+cl+'"><b>'+ar+' '+ds+'</b></td><td style="'+cl+'">'+(pct>=0?'+':'')+pct.toFixed(1)+'%</td></tr>';
-}
-h+='</table>';
-
-h+='<div class="imp"><h3>v5 Täienduste mõju</h3>';
-h+='<p>🌞 <b>Clipping Capture:</b> '+(gc('eC')?'€'+fm(r5.tCR)+' lisatulu (15a) — '+fp(r5.tCM)+' MWh haaratud reaalsest PEJ ülejäägist @ 0€ soetuskulu':'Väljas')+'</p>';
-h+='<p>🔋 <b>Degradatsiooniarvestus:</b> '+(gc('eD')?'€'+fp(r5.cpc)+'/tsükkel | Min spread: €'+fp(r5.mSpr)+'/MWh — madala marginaaliga arbitraaž filtreeritud':'Väljas')+'</p>';
-h+='<p>📡 <b>FCR-D/aFRR:</b> '+(gc('eF')?'FCR €'+fm(r5.tFcr)+' (min kulumine) + aFRR €'+fm(r5.tAfrr)+' + Arb €'+fm(r5.tArb)+' | Tsükleid: '+fm(r5.tCyc)+'/'+fm(gv('mc')):'Väljas')+'</p>';
-h+='<p style="margin-top:6px">📊 <b>PEJ reaalne toodang:</b> '+fm(totalPEJ)+' kWh/a | Platoo: '+fp(mPlat.reduce(function(a,b){return a+b},0))+' h/a | Clipping potentsiaal: '+fm(mClip.reduce(function(a,b){return a+b},0))+' kWh/a</p>';
-h+='</div></div>';
-
-document.getElementById('out').innerHTML='<div class="pnl"><h2>📈 Reaalne PEJ toodang 2025</h2><div id="pvChart"></div></div>'+h;
-drawPV();
+function mkBars(ds, lbl) {
+  var mx = 1;
+  var d, i, v, pct;
+  for (d = 0; d < ds.length; d++) {
+    for (i = 0; i < ds[d].d.length; i++) { v = Math.abs(ds[d].d[i]); if (v > mx) { mx = v; } }
+  }
+  var h = '<div class="lgd">';
+  for (d = 0; d < ds.length; d++) { h += '<span><i style="background:' + ds[d].c + '"></i>' + ds[d].n + '</span>'; }
+  h += '</div><div class="bars">';
+  for (i = 0; i < lbl.length; i++) {
+    h += '<div class="bgg">';
+    for (d = 0; d < ds.length; d++) {
+      pct = Math.max(2, Math.abs(ds[d].d[i]) / mx * 100);
+      h += '<div class="br" style="height:' + pct + '%;background:' + ds[d].c + '"></div>';
+    }
+    h += '</div>';
+  }
+  h += '</div><div class="xlb">';
+  for (i = 0; i < lbl.length; i++) { h += '<span>' + lbl[i] + '</span>'; }
+  h += '</div>';
+  return h;
 }
 
-function sT(id,el){
-var ts=document.querySelectorAll('.tc');for(var i=0;i<ts.length;i++)ts[i].classList.remove('on');
-document.getElementById(id).classList.add('on');
-var bs=el.parentElement.querySelectorAll('.tab');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');
-el.classList.add('on');
+function mkLine(ds, lbl, zero) {
+  var W = 560, H = 180, P = 5;
+  var all = [];
+  var d, i;
+  for (d = 0; d < ds.length; d++) { for (i = 0; i < ds[d].d.length; i++) { all.push(ds[d].d[i]); } }
+  if (zero) { all.push(0); }
+  var mn = all[0], mx = all[0];
+  for (i = 1; i < all.length; i++) { if (all[i] < mn) { mn = all[i]; } if (all[i] > mx) { mx = all[i]; } }
+  if (mn === mx) { mn = mn - 1; mx = mx + 1; }
+  var rng = mx - mn;
+  var svg = '';
+  var v, yy, xp, yp, pts;
+  for (i = 0; i <= 4; i++) {
+    v = mn + (rng / 4) * i;
+    yy = H - P - ((v - mn) / rng) * (H - 2 * P);
+    svg += '<line x1="' + P + '" y1="' + yy.toFixed(1) + '" x2="' + (W - P) + '" y2="' + yy.toFixed(1) + '" stroke="#253040" stroke-width=".5"/>';
+    svg += '<text x="2" y="' + (yy + 3).toFixed(1) + '" fill="#6a7d90" font-size="8">' + Math.round(v / 1000) + 'k</text>';
+  }
+  if (zero) {
+    yy = H - P - ((0 - mn) / rng) * (H - 2 * P);
+    svg += '<line x1="' + P + '" y1="' + yy.toFixed(1) + '" x2="' + (W - P) + '" y2="' + yy.toFixed(1) + '" stroke="rgba(255,255,255,.25)" stroke-dasharray="4,3"/>';
+  }
+  for (d = 0; d < ds.length; d++) {
+    pts = '';
+    for (i = 0; i < ds[d].d.length; i++) {
+      xp = P + (i / (lbl.length - 1)) * (W - 2 * P);
+      yp = H - P - ((ds[d].d[i] - mn) / rng) * (H - 2 * P);
+      pts += xp.toFixed(1) + ',' + yp.toFixed(1) + ' ';
+    }
+    svg += '<polyline points="' + pts + '" fill="none" stroke="' + ds[d].c + '" stroke-width="2"/>';
+  }
+  for (i = 0; i < lbl.length; i++) {
+    if (i % 2 === 0) {
+      xp = P + (i / (lbl.length - 1)) * (W - 2 * P);
+      svg += '<text x="' + xp.toFixed(1) + '" y="' + (H + 11) + '" text-anchor="middle" fill="#6a7d90" font-size="8">' + lbl[i] + '</text>';
+    }
+  }
+  var h = '<div class="lgd">';
+  for (d = 0; d < ds.length; d++) { h += '<span><i style="background:' + ds[d].c + '"></i>' + ds[d].n + '</span>'; }
+  h += '</div><div class="svgc"><svg viewBox="0 0 ' + W + ' ' + (H + 16) + '">' + svg + '</svg></div>';
+  return h;
 }
 
-// Initial PV chart
-setTimeout(drawPV,100);
+function mkCumCF(ds, lbl) {
+  var W = 560, H = 220, P = 8, LM = 40;
+  var all = [0];
+  var d, i, v;
+  for (d = 0; d < ds.length; d++) { for (i = 0; i < ds[d].d.length; i++) { all.push(ds[d].d[i]); } }
+  var mn = all[0], mx = all[0];
+  for (i = 1; i < all.length; i++) { if (all[i] < mn) { mn = all[i]; } if (all[i] > mx) { mx = all[i]; } }
+  var pad = (mx - mn) * 0.1; mn = mn - pad; mx = mx + pad;
+  var rng = mx - mn; if (rng === 0) { rng = 1; }
+
+  function xp(idx) { return LM + (idx / (lbl.length - 1)) * (W - LM - P); }
+  function yp(val) { return H - P - ((val - mn) / rng) * (H - 2 * P); }
+
+  var svg = '';
+  var zy = yp(0);
+  var topY = yp(mx);
+  var botY = yp(mn);
+
+  if (zy > topY) { svg += '<rect x="' + LM + '" y="' + topY.toFixed(1) + '" width="' + (W - LM - P) + '" height="' + Math.max(0, zy - topY).toFixed(1) + '" fill="rgba(0,212,170,0.05)"/>'; }
+  if (botY > zy) { svg += '<rect x="' + LM + '" y="' + zy.toFixed(1) + '" width="' + (W - LM - P) + '" height="' + Math.max(0, botY - zy).toFixed(1) + '" fill="rgba(239,83,80,0.05)"/>'; }
+
+  for (i = 0; i <= 5; i++) {
+    v = mn + (rng / 5) * i;
+    var gy = yp(v);
+    svg += '<line x1="' + LM + '" y1="' + gy.toFixed(1) + '" x2="' + (W - P) + '" y2="' + gy.toFixed(1) + '" stroke="#1e2a38" stroke-width="0.5"/>';
+    svg += '<text x="' + (LM - 4) + '" y="' + (gy + 3).toFixed(1) + '" text-anchor="end" fill="#5a6d80" font-size="9" font-family="monospace">' + Math.round(v / 1000) + 'k</text>';
+  }
+
+  for (i = 0; i < lbl.length; i++) {
+    var vx = xp(i);
+    svg += '<line x1="' + vx.toFixed(1) + '" y1="' + topY.toFixed(1) + '" x2="' + vx.toFixed(1) + '" y2="' + botY.toFixed(1) + '" stroke="#1a2535" stroke-width="0.3"/>';
+  }
+
+  svg += '<line x1="' + LM + '" y1="' + zy.toFixed(1) + '" x2="' + (W - P) + '" y2="' + zy.toFixed(1) + '" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.5"/>';
+  svg += '<rect x="' + (LM - 2) + '" y="' + (zy - 9).toFixed(1) + '" width="28" height="18" rx="3" fill="#253040" stroke="#3a4d60" stroke-width="0.5"/>';
+  svg += '<text x="' + (LM + 12) + '" y="' + (zy + 5).toFixed(1) + '" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700" font-family="monospace">0€</text>';
+
+  for (d = 0; d < ds.length; d++) {
+    var gradId = 'cfg' + d;
+    svg += '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + ds[d].c + '" stop-opacity="0.15"/><stop offset="100%" stop-color="' + ds[d].c + '" stop-opacity="0.02"/></linearGradient></defs>';
+    var area = 'M' + xp(0).toFixed(1) + ',' + zy.toFixed(1);
+    for (i = 0; i < ds[d].d.length; i++) { area += ' L' + xp(i).toFixed(1) + ',' + yp(ds[d].d[i]).toFixed(1); }
+    area += ' L' + xp(ds[d].d.length - 1).toFixed(1) + ',' + zy.toFixed(1) + ' Z';
+    svg += '<path d="' + area + '" fill="url(#' + gradId + ')"/>';
+  }
+
+  for (d = 0; d < ds.length; d++) {
+    var pts = '';
+    for (i = 0; i < ds[d].d.length; i++) { pts += xp(i).toFixed(1) + ',' + yp(ds[d].d[i]).toFixed(1) + ' '; }
+    svg += '<polyline points="' + pts + '" fill="none" stroke="' + ds[d].c + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+  }
+
+  for (d = 0; d < ds.length; d++) {
+    for (i = 0; i < ds[d].d.length; i++) {
+      svg += '<circle cx="' + xp(i).toFixed(1) + '" cy="' + yp(ds[d].d[i]).toFixed(1) + '" r="2.5" fill="' + ds[d].c + '" stroke="#0b1017" stroke-width="1"/>';
+    }
+  }
+
+  for (d = 0; d < ds.length; d++) {
+    if (!ds[d].pb) { continue; }
+    var pbIdx = ds[d].pb - 1;
+    var bx = xp(pbIdx);
+    var by = zy;
+    if (pbIdx > 0 && pbIdx < ds[d].d.length) {
+      var prevVal = ds[d].d[pbIdx - 1];
+      var curVal = ds[d].d[pbIdx];
+      if (curVal !== prevVal) {
+        var frac = (0 - prevVal) / (curVal - prevVal);
+        bx = xp(pbIdx - 1 + frac);
+      }
+    }
+    svg += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="12" fill="none" stroke="' + ds[d].c + '" stroke-width="1" stroke-opacity="0.25"/>';
+    svg += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="7" fill="none" stroke="' + ds[d].c + '" stroke-width="1.5" stroke-opacity="0.45"/>';
+    svg += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="4.5" fill="' + ds[d].c + '" stroke="#ffffff" stroke-width="1.5"/>';
+    var ly = by - 20 - d * 20;
+    svg += '<line x1="' + bx.toFixed(1) + '" y1="' + (by - 5).toFixed(1) + '" x2="' + bx.toFixed(1) + '" y2="' + (ly + 9).toFixed(1) + '" stroke="' + ds[d].c + '" stroke-width="0.8" stroke-opacity="0.6"/>';
+    svg += '<rect x="' + (bx - 24).toFixed(1) + '" y="' + (ly - 8).toFixed(1) + '" width="48" height="17" rx="4" fill="' + ds[d].c + '"/>';
+    svg += '<text x="' + bx.toFixed(1) + '" y="' + (ly + 5).toFixed(1) + '" text-anchor="middle" fill="#0b1017" font-size="9" font-weight="700">' + ds[d].pb + '. aasta</text>';
+  }
+
+  for (i = 0; i < lbl.length; i++) {
+    svg += '<text x="' + xp(i).toFixed(1) + '" y="' + (H + 13) + '" text-anchor="middle" fill="#5a6d80" font-size="8" font-family="monospace">' + lbl[i] + '</text>';
+  }
+
+  var h = '<div class="lgd">';
+  for (d = 0; d < ds.length; d++) {
+    var pbTxt = ds[d].pb ? (' (tasuvus: ' + ds[d].pb + 'a)') : ' (ei tasu)';
+    h += '<span><i style="background:' + ds[d].c + '"></i>' + ds[d].n + pbTxt + '</span>';
+  }
+  h += '</div>';
+  h += '<div class="svgc"><svg viewBox="0 0 ' + W + ' ' + (H + 18) + '" style="max-height:280px">' + svg + '</svg></div>';
+  return h;
+}
+
+function mkDonut(y1) {
+  var items = [
+    {n:'DAM', v:y1.dam, c:'#42a5f5'},
+    {n:'aFRR_e', v:y1.ae, c:'#66bb6a'},
+    {n:'mFRR_e', v:y1.me, c:'#ffa726'},
+    {n:'FCR', v:y1.fcr, c:'#ab47bc'},
+    {n:'aFRR_c', v:y1.ac, c:'#26c6da'},
+    {n:'mFRR_c', v:y1.mc, c:'#ef5350'},
+    {n:'PEJ', v:y1.pt, c:'#00d4aa'}
+  ];
+  var total = 0, i;
+  for (i = 0; i < items.length; i++) { total += items[i].v; }
+  if (total === 0) { return '<p>Andmed puuduvad</p>'; }
+  var Rd = 70, r = 42, cx = 80, cy = 80;
+  var a = -Math.PI / 2;
+  var svg = '';
+  var ang, x1, y1r, x2, y2, x3, y3, x4, y4, lg;
+  for (i = 0; i < items.length; i++) {
+    ang = (items[i].v / total) * 2 * Math.PI;
+    if (ang < 0.01) { a = a + ang; continue; }
+    x1 = cx + Rd * Math.cos(a); y1r = cy + Rd * Math.sin(a);
+    x2 = cx + Rd * Math.cos(a + ang); y2 = cy + Rd * Math.sin(a + ang);
+    x3 = cx + r * Math.cos(a + ang); y3 = cy + r * Math.sin(a + ang);
+    x4 = cx + r * Math.cos(a); y4 = cy + r * Math.sin(a);
+    lg = ang > Math.PI ? 1 : 0;
+    svg += '<path d="M' + x1.toFixed(2) + ',' + y1r.toFixed(2) + ' A' + Rd + ',' + Rd + ' 0 ' + lg + ',1 ' + x2.toFixed(2) + ',' + y2.toFixed(2) + ' L' + x3.toFixed(2) + ',' + y3.toFixed(2) + ' A' + r + ',' + r + ' 0 ' + lg + ',0 ' + x4.toFixed(2) + ',' + y4.toFixed(2) + ' Z" fill="' + items[i].c + '"/>';
+    a = a + ang;
+  }
+  var dl = '<div class="dnl">';
+  for (i = 0; i < items.length; i++) {
+    dl += '<div><i style="background:' + items[i].c + '"></i>' + items[i].n + ': ' + fm(items[i].v) + '€ (' + Math.round(items[i].v / total * 100) + '%)</div>';
+  }
+  dl += '</div>';
+  return '<div class="dnw"><svg viewBox="0 0 160 160">' + svg + '</svg>' + dl + '</div>';
+}
+
+/* === COMPARISON === */
+function showComp() {
+  var rows = [];
+  rows.push({s:'FINANTSNÄITAJAD'});
+  rows.push({n:'NPV €',o:fm(RO.npv),r:fm(RR.npv),p:fm(RP.npv),b:'>0',t:RR.npv>0?'🟢':'🔴'});
+  rows.push({n:'IRR %',o:fd(RO.irr*100,1),r:fd(RR.irr*100,1),p:fd(RP.irr*100,1),b:'>12%',t:RR.irr>0.12?'🟢':'🔴'});
+  rows.push({n:'Payback',o:(RO.pb?RO.pb:'N/A')+'a',r:(RR.pb?RR.pb:'N/A')+'a',p:(RP.pb?RP.pb:'N/A')+'a',b:'<5a',t:(RR.pb&&RR.pb<=5)?'🟢':'🟡'});
+  rows.push({n:'ROI 15a',o:fd(RO.roi,1)+'%',r:fd(RR.roi,1)+'%',p:fd(RP.roi,1)+'%',b:'>100%',t:RR.roi>100?'🟢':'🟡'});
+  rows.push({n:'Cash/Cash a1',o:fd(RO.coc,1)+'%',r:fd(RR.coc,1)+'%',p:fd(RP.coc,1)+'%',b:'>15%',t:RR.coc>15?'🟢':'🟡'});
+  rows.push({n:'Eq Multiple',o:fd(RO.eq+1,2)+'x',r:fd(RR.eq+1,2)+'x',p:fd(RP.eq+1,2)+'x',b:'>2x',t:(RR.eq+1)>2?'🟢':'🟡'});
+  rows.push({s:'RAHAVOOD'});
+  rows.push({n:'CAPEX',o:fm(RO.cx)+'€',r:fm(RR.cx)+'€',p:fm(RP.cx)+'€',b:'-',t:'-'});
+  rows.push({n:'15a Tulu',o:fm(RO.t15)+'€',r:fm(RR.t15)+'€',p:fm(RP.t15)+'€',b:'-',t:'-'});
+  rows.push({n:'15a EBITDA',o:fm(RO.e15)+'€',r:fm(RR.e15)+'€',p:fm(RP.e15)+'€',b:'-',t:'-'});
+  rows.push({n:'CF/a kesk',o:fm(RO.avg)+'€',r:fm(RR.avg)+'€',p:fm(RP.avg)+'€',b:'>50k',t:RR.avg>50000?'🟢':'🟡'});
+  rows.push({s:'EFEKTIIVSUS'});
+  rows.push({n:'EBITDA %',o:fd(RO.em,1)+'%',r:fd(RR.em,1)+'%',p:fd(RP.em,1)+'%',b:'>60%',t:RR.em>60?'🟢':'🟡'});
+  rows.push({n:'BESS €/kWh/a',o:fd(RO.bk1,1),r:fd(RR.bk1,1),p:fd(RP.bk1,1),b:'>100',t:RR.bk1>100?'🟢':'🟡'});
+
+  var d0 = (RR.yrs && RR.yrs.length ? RR.yrs[0].dbg : null);
+  rows.push({s:'VÕRGUPIIRANGUD'});
+  if (d0) {
+    rows.push({n:'Import limiit',o:fd(d0.impLim,2)+'MW',r:fd(d0.impLim,2)+'MW',p:fd(d0.impLim,2)+'MW',b:'-',t:(d0.impLim>=gv('i1'))?'🟢':'🟡'});
+    rows.push({n:'Eksport limiit',o:fd(d0.expLim,2)+'MW',r:fd(d0.expLim,2)+'MW',p:fd(d0.expLim,2)+'MW',b:'-',t:(d0.expLim>=(gv('i1')+gv('j1')))?'🟢':'🟡'});
+    rows.push({n:'Eff. BESS exp',o:fd(d0.bpExp*1000,0)+'kW',r:fd(d0.bpExp*1000,0)+'kW',p:fd(d0.bpExp*1000,0)+'kW',b:'-',t:(d0.bpExp>=gv('i1'))?'🟢':'🟡'});
+    rows.push({n:'BESS factor',o:fd(d0.bessEnergyFactor*100,1)+'%',r:fd(d0.bessEnergyFactor*100,1)+'%',p:fd(d0.bessEnergyFactor*100,1)+'%',b:'100%',t:(d0.bessEnergyFactor>=0.99)?'🟢':(d0.bessEnergyFactor>=0.8?'🟡':'🔴')});
+    rows.push({n:'PEJ factor',o:fd(d0.pejEnergyFactor*100,1)+'%',r:fd(d0.pejEnergyFactor*100,1)+'%',p:fd(d0.pejEnergyFactor*100,1)+'%',b:'100%',t:(d0.pejEnergyFactor>=0.99)?'🟢':(d0.pejEnergyFactor>=0.8?'🟡':'🔴')});
+  }
+
+  var h = '<div class="bx"><div class="bx-h">Investori koondtabel</div><div class="bx-b"><div class="sx"><table class="dt"><thead><tr><th>Näitaja</th><th style="color:#00d4aa">Opt</th><th style="color:#42a5f5">Real</th><th style="color:#ef5350">Pess</th><th>Bench</th><th>St</th></tr></thead><tbody>';
+  var i, ro;
+  for (i = 0; i < rows.length; i++) {
+    ro = rows[i];
+    if (ro.s) {
+      h += '<tr><td colspan="6" style="font-weight:800;color:#dce4ed;padding-top:12px;border-bottom:2px solid #253040">' + ro.s + '</td></tr>';
+    } else {
+      h += '<tr><td>' + ro.n + '</td><td style="color:#00d4aa">' + ro.o + '</td><td style="color:#42a5f5">' + ro.r + '</td><td style="color:#ef5350">' + ro.p + '</td><td>' + ro.b + '</td><td>' + ro.t + '</td></tr>';
+    }
+  }
+  h += '</tbody></table></div></div></div>';
+  document.getElementById('out_comp').innerHTML = h;
+}
+
+/* === REPORT === */
+function showReport() {
+  var r = RR;
+  var y1 = r.yrs[0] ? r.yrs[0] : {};
+  var bp = gv('i1'), bc = gv('i2'), pp = gv('j1');
+  var h = '';
+  h += '<div class="rpt"><h2>Aku tasuvusanalüüsi kokkuvõte</h2>';
+  h += '<p><b>BESS:</b> ' + (bp * 1000) + 'kW/' + (bc * 1000) + 'kWh | <b>PEJ:</b> ' + (pp * 1000) + 'kW</p>';
+  h += '<div class="hi"><b>CAPEX: ' + fm(r.cx) + '€</b> | BESS: ' + fm(gv('c1') * bc * 1000) + '€ | PEJ: ' + fm(gv('c2') * pp * 1000) + '€</div>';
+
+  var d0 = (r.yrs && r.yrs.length ? r.yrs[0].dbg : null);
+  if (d0) {
+    h += '<div class="ri" style="background:rgba(255,167,38,.08);border-left-color:#ffa726"><b>⚡ Võrgupiirangute mõju:</b><br>';
+    h += 'Import: ' + fd(d0.impLim,2) + ' MW | Eksport: ' + fd(d0.expLim,2) + ' MW<br>';
+    h += 'Kärbe mode: <b>' + d0.mode + '</b><br>';
+    h += 'BESS factor: ' + fd(d0.bessEnergyFactor*100,1) + '% | PEJ factor: ' + fd(d0.pejEnergyFactor*100,1) + '% | Pro-rata (võrdlus): ' + fd(d0.concFactor*100,1) + '%';
+    h += '</div>';
+  }
+
+  h += '<h3>Finantsnäitajad</h3><div class="sx"><table><thead><tr><th></th><th style="color:#00d4aa">Opt</th><th style="color:#42a5f5">Real</th><th style="color:#ef5350">Pess</th></tr></thead><tbody>';
+  h += '<tr><td>NPV</td><td>' + fm(RO.npv) + '€</td><td>' + fm(r.npv) + '€</td><td>' + fm(RP.npv) + '€</td></tr>';
+  h += '<tr><td>IRR</td><td>' + fp(RO.irr) + '</td><td>' + fp(r.irr) + '</td><td>' + fp(RP.irr) + '</td></tr>';
+  h += '<tr><td>Payback</td><td>' + (RO.pb ? RO.pb : 'N/A') + 'a</td><td>' + (r.pb ? r.pb : 'N/A') + 'a</td><td>' + (RP.pb ? RP.pb : 'N/A') + 'a</td></tr>';
+  h += '<tr><td>ROI</td><td>' + fd(RO.roi, 1) + '%</td><td>' + fd(r.roi, 1) + '%</td><td>' + fd(RP.roi, 1) + '%</td></tr>';
+  h += '<tr><td>EBITDA</td><td>' + fm(RO.e15) + '€</td><td>' + fm(r.e15) + '€</td><td>' + fm(RP.e15) + '€</td></tr>';
+  h += '</tbody></table></div>';
+
+  h += '<h3>A1 tulu (Realistlik)</h3>';
+  h += '<p>BESS: <b>' + fm(y1.bt ? y1.bt : 0) + '€</b> | PEJ: <b>' + fm(y1.pt ? y1.pt : 0) + '€</b> | Kokku: <b style="color:#00d4aa">' + fm(y1.rev ? y1.rev : 0) + '€</b></p>';
+
+  if (r.npv > 0) {
+    h += '<div class="hi"><b>✅ POSITIIVNE:</b> NPV ' + fm(r.npv) + '€, IRR ' + fp(r.irr) + ', payback ' + (r.pb ? r.pb : 'N/A') + 'a.</div>';
+  } else {
+    h += '<div class="ri"><b>⚠️</b> NPV negatiivne (' + fm(r.npv) + '€).</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="rpt"><h2>⚠️ Riskid</h2>';
+  h += '<div class="ri"><b>KRIITILINE:</b> Praegune tulukus ei garanteeri tulevikku.</div>';
+  h += '<h3>A) Konkurents</h3><p>aFRR/mFRR hinnad võivad langeda 30-70%.</p>';
+  h += '<h3>B) Regulatsioon</h3><p>Elering muudab reegleid pidevalt.</p>';
+  h += '<h3>C) Tehnoloogia</h3><p>Uued akutehnoloogiad, hinnalangus 40-60%.</p>';
+  h += '<h3>D) Volatiilsus</h3><p>Suuremad võrguühendused vähendavad hinnaerinevusi.</p>';
+  h += '</div>';
+  h += '<div class="disc"><h4>VASTUTUSE PIIRANG</h4><p>LOPLIK INVESTEERINGUOTSUS ON KLIENDI VASTUTUS.</p></div>';
+  document.getElementById('out_rpt').innerHTML = h;
+}
 </script>
 </body>
 </html>
